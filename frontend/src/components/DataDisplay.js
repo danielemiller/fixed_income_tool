@@ -1,47 +1,30 @@
+// DataDisplay.js
 import React from 'react';
-import { Bar } from 'react-chartjs-2';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
 
 const DataDisplay = ({ data }) => {
-  const chartData = {
-    labels: Object.keys(data),
-    datasets: [
-      {
-        label: 'Fixed Income Metrics',
-        data: Object.values(data),
-        backgroundColor: [
-          'rgba(75, 192, 192, 0.2)',
-          'rgba(255, 206, 86, 0.2)',
-          'rgba(153, 102, 255, 0.2)',
-          'rgba(255, 99, 132, 0.2)',
-          'rgba(54, 162, 235, 0.2)',
-          'rgba(255, 159, 64, 0.2)',
-          'rgba(201, 203, 207, 0.2)'
-        ],
-        borderColor: [
-          'rgba(75, 192, 192, 1)',
-          'rgba(255, 206, 86, 1)',
-          'rgba(153, 102, 255, 1)',
-          'rgba(255, 99, 132, 1)',
-          'rgba(54, 162, 235, 1)',
-          'rgba(255, 159, 64, 1)',
-          'rgba(201, 203, 207, 1)'
-        ],
-        borderWidth: 1
-      }
-    ]
-  };
-
-  const chartOptions = {
-    scales: {
-      y: {
-        beginAtZero: true
-      }
-    }
-  };
+  const chartData = Object.keys(data).map((key) => ({ name: key, value: data[key] }));
 
   return (
     <div data-testid="data-display">
-      <Bar data={chartData} options={chartOptions} />
+      <BarChart
+        width={600}
+        height={300}
+        data={chartData}
+        margin={{
+          top: 5,
+          right: 30,
+          left: 20,
+          bottom: 5,
+        }}
+      >
+        <CartesianGrid strokeDasharray="3 3" />
+        <XAxis dataKey="name" />
+        <YAxis />
+        <Tooltip />
+        <Legend />
+        <Bar dataKey="value" fill="#8884d8" />
+      </BarChart>
     </div>
   );
 };
