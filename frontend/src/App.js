@@ -1,20 +1,16 @@
+import React from 'react';
+import InputForm from './components/InputForm';
+import MetricsSelection from './components/MetricsSelection';
+import DataDisplay from './components/DataDisplay';
+import ErrorHandling from './components/ErrorHandling';
+
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <h1>Test</h1>
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <InputForm />
+      <MetricsSelection />
+      <DataDisplay />
+      <ErrorHandling />
     </div>
   );
 }
