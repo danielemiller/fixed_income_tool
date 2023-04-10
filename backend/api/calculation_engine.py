@@ -33,8 +33,8 @@ def yield_to_call(bond_price_value, face_value, coupon_rate, years_to_call, call
 
 
 def average_life(payment_schedule):
-    weighted_payments = [t * pmt for t, pmt in enumerate(payment_schedule, 1)]
-    return sum(weighted_payments) / sum(payment_schedule)
+    weighted_payments = [t * pmt['payment'] for t, pmt in enumerate(payment_schedule, 1)]
+    return sum(weighted_payments) / sum(pmt['payment'] for pmt in payment_schedule)
 
 
 def yield_curve(spot_rates, time_to_maturities):
@@ -76,7 +76,12 @@ def calculate_bond_metrics(parsed_data):
     
     bond_price_result = bond_price(face_value, coupon_rate, ytm, years_to_maturity)
     yield_to_maturity_result = yield_to_maturity(bond_price_result, face_value, coupon_rate, years_to_maturity)
-    yield_to_call_result = yield_to_call(bond_price_result, face_value, coupon_rate, parsed_data['years_to_call'], parsed_data['call_price'])
+    
+    if 'years_to_call' in parsed_data and 'call_price' in parsed_data:
+        yield_to_call_result = yield_to_call(bond_price_result, face_value, coupon_rate, parsed_data['years_to_call'], parsed_data['call_price'])
+    else:
+        yield_to_call_result = None
+    
     average_life_result = average_life(parsed_data['payment_schedule'])
     duration_result = duration(face_value, coupon_rate, ytm, years_to_maturity)
     convexity_result = convexity(face_value, coupon_rate, ytm, years_to_maturity)

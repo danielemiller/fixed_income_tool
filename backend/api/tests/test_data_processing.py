@@ -8,13 +8,6 @@ from datetime import date, datetime
 import pytest
 from api.data_processing import parse_date, format_output_data
 
-# def test_parse_date():
-#     date_string = '2020-01-01'
-#     expected_date = datetime.date(2020, 1, 1)
-
-#     parsed_date = parse_date(date_string)
-
-#     assert parsed_date == expected_date
 def test_parse_date():
     date_string = '2020-01-01'
     expected_date = date(2020, 1, 1)
