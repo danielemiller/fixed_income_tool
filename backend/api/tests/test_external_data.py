@@ -5,35 +5,26 @@
 
 # backend/api/tests/test_external_data.py
 import pytest
-from unittest.mock import MagicMock, patch
-from ..external_data import fetch_market_data
+from api.external_data import get_bond_price, get_risk_free_yield, get_benchmark_yield
 
-def test_fetch_market_data():
-    # Mock the API response
-    mock_api_response = {
-        'status': 'success',
-        'data': {
-            'timestamp': 1620133200,
-            'yield_curve': [
-                {'maturity': '1M', 'rate': 0.01},
-                {'maturity': '3M', 'rate': 0.02},
-                {'maturity': '6M', 'rate': 0.03},
-                # ...
-            ],
-        },
+
+def test_get_bond_price(mocker):
+    mock_data = {
+        '2023-04-07': {'4. close': '105.25'}
     }
+    mocker.patch('api.external_data.ts.get_daily', return_value=(mock_data, {}))
 
-    with patch('requests.get') as mock_get:
-        # Replace the real API call with our mock API response
-        mock_get.return_value = MagicMock(json=lambda: mock_api_response)
+    bond_price = get_bond_price('TEST_BOND')
+    assert bond_price == 105.25
 
-        # Call the function that fetches market data
-        market_data = fetch_market_data()
+def test_get_risk_free_yield(mocker):
+    mocker.patch('api.external_data.fred.get_series', return_value=[1.5])
 
-        # Assert that the data is correctly retrieved and processed
-        assert market_data['yield_curve'] == [
-            {'maturity': '1M', 'rate': 0.01},
-            {'maturity': '3M', 'rate': 0.02},
-            {'maturity': '6M', 'rate': 0.03},
-            # ...
-        ]
+    risk_free_yield = get_risk_free_yield()
+    assert risk_free_yield == 0.015
+
+def test_get_benchmark_yield(mocker):
+    mocker.patch('api.external_data.fred.get_series', return_value=[2.0])
+
+    benchmark_yield = get_benchmark_yield()
+    assert benchmark_yield == 0.02

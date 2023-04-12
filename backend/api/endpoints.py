@@ -8,6 +8,7 @@ def process_bond_data(request):
     input_data = request.data
     parsed_data = parse_input_data(input_data)
     calculated_metrics = calculate_bond_metrics(parsed_data)
-    formatted_output = format_output_data(calculated_metrics)
+    formatted_output = format_output_data(calculated_metrics, parsed_data['bond_price'])
+
 
     return JsonResponse(formatted_output, safe=False)

@@ -21,8 +21,11 @@ def test_format_output_data():
     expected_output = {
         'bond_price': '1,043.76',
         'yield_to_maturity': '4.00%',
+        'fetched_bond_price': '1,043.76',  # Add the fetched_bond_price key with the appropriate formatted value
     }
 
-    formatted_output = format_output_data(output_data)
+    fetched_bond_price = 1043.76  # Add an appropriate value for the fetched_bond_price argument
+
+    formatted_output = format_output_data(output_data, fetched_bond_price)
 
     assert formatted_output == expected_output
