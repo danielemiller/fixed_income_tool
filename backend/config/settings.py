@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'api',
+    'data_storage',
 ]
 
 MIDDLEWARE = [
@@ -105,3 +106,4 @@ USE_L10N = True
 USE_TZ = True
 
 STATIC_URL = '/static/'
+
