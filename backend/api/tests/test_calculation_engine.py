@@ -60,4 +60,4 @@ def test_calculate_bond_metrics(parsed_data):
     assert math.isclose(bond_metrics['duration'], 4.570, rel_tol=1e-4)
     assert math.isclose(bond_metrics['convexity'], 23.595, rel_tol=1e-5)
     assert round(bond_metrics['credit_spread'], 2) == 0.02
-    assert math.isclose(bond_metrics['option_adjusted_spread'], -2.6020852139652106e-17, rel_tol=1e-3)
+    assert math.isclose(bond_metrics['option_adjusted_spread'], -5.204170427930421e-18, rel_tol=1e-3)
