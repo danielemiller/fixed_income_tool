@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'api',
     'data_storage',
+    'dbbackup',
 ]
 
 MIDDLEWARE = [
@@ -107,3 +108,5 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+DBBACKUP_STORAGE = 'django.core.files.storage.FileSystemStorage'
+DBBACKUP_STORAGE_OPTIONS = {'location': 'data_storage/db/backups'}

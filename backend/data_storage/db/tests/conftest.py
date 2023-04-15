@@ -2,6 +2,8 @@
 import pytest
 from api.models import BondData, ValuationMetrics, RiskAnalysisMetrics, HistoricalData
 from datetime import date
+from dbbackup.management.commands import dbbackup, dbrestore
+from django.core.management import call_command
 
 @pytest.fixture
 def bond():
@@ -59,3 +61,22 @@ def historical_data(db, bond):
     )
     return historical_data_instance
 
+@pytest.fixture
+def backup_manager():
+    backup_manager_instance = dbbackup.Command()
+    return backup_manager_instance
+
+@pytest.fixture
+def data_manager():
+    # Use Django's call_command to call dbbackup and dbrestore
+    class DataManager:
+        def backup(self):
+            call_command('dbbackup')
+
+        def restore(self, backup_file=None):
+            if backup_file:
+                call_command('dbrestore', '--input-filename', backup_file, '--noinput')
+            else:
+                call_command('dbrestore', '--noinput')
+
+    return DataManager()
