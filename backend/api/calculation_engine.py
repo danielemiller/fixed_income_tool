@@ -85,8 +85,18 @@ def calculate_bond_metrics(parsed_data):
     average_life_result = average_life(parsed_data['payment_schedule'])
     duration_result = duration(face_value, coupon_rate, ytm, years_to_maturity)
     convexity_result = convexity(face_value, coupon_rate, ytm, years_to_maturity)
-    credit_spread_result = credit_spread(yield_to_maturity_result, parsed_data['risk_free_yield'])
-    option_adjusted_spread_result = option_adjusted_spread(yield_to_maturity_result, parsed_data['benchmark_yield'], parsed_data['option_value'])
+
+    # Calculate credit spread only if risk_free_yield is provided
+    if parsed_data['risk_free_yield']:
+        credit_spread_result = credit_spread(yield_to_maturity_result, parsed_data['risk_free_yield'])
+    else:
+        credit_spread_result = None
+
+    # Calculate option adjusted spread only if benchmark_yield and option_value are provided
+    if parsed_data['benchmark_yield'] and parsed_data['option_value']:
+        option_adjusted_spread_result = option_adjusted_spread(yield_to_maturity_result, parsed_data['benchmark_yield'], parsed_data['option_value'])
+    else:
+        option_adjusted_spread_result = None
 
     return {
         'bond_price': bond_price_result,

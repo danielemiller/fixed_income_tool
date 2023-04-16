@@ -4,15 +4,40 @@ const InputForm = ({ onSubmit }) => {
   const [issueDate, setIssueDate] = useState('');
   const [maturityDate, setMaturityDate] = useState('');
   const [couponRate, setCouponRate] = useState('');
-  const [yieldToMaturity, setYieldToMaturity] = useState('');
+  const [yearsToMaturity, setYearsToMaturity] = useState('');
   const [creditRating, setCreditRating] = useState('');
   const [currency, setCurrency] = useState('');
   const [issuer, setIssuer] = useState('');
+  const [bondCusip, setBondCusip] = useState('');
+  const [useApiData, setUseApiData] = useState(false);
+  const [optionalBondPrice, setOptionalBondPrice] = useState('');
+  const [optionalYtm, setOptionalYtm] = useState('');
+  const [optionalRiskFreeYield, setOptionalRiskFreeYield] = useState('');
+  const [optionalBenchmarkYield, setOptionalBenchmarkYield] = useState('');
+  const [optionalOptionValue, setOptionalOptionValue] = useState('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSubmit({ issueDate, maturityDate, couponRate, yieldToMaturity, creditRating, currency, issuer });
+    onSubmit({
+      issue_date: issueDate,
+      maturity_date: maturityDate,
+      coupon_rate: couponRate,
+      years_to_maturity: yearsToMaturity,
+      credit_rating: creditRating,
+      currency: currency,
+      issuer: issuer,
+      bond_cusip: bondCusip,
+      use_api_data: useApiData,
+      optional_data: {
+        bond_price: optionalBondPrice,
+        ytm: optionalYtm,
+        risk_free_yield: optionalRiskFreeYield,
+        benchmark_yield: optionalBenchmarkYield,
+        option_value: optionalOptionValue,
+      },
+    });
   };
+  
 
   return (
     <form data-testid="input-form" onSubmit={handleSubmit}>
@@ -23,7 +48,7 @@ const InputForm = ({ onSubmit }) => {
         value={issueDate}
         onChange={(e) => setIssueDate(e.target.value)}
       />
-      
+
       <label htmlFor="maturity-date">Maturity Date</label>
       <input
         id="maturity-date"
@@ -40,12 +65,12 @@ const InputForm = ({ onSubmit }) => {
         onChange={(e) => setCouponRate(e.target.value)}
       />
 
-      <label htmlFor="yield-to-maturity">Yield to Maturity</label>
+      <label htmlFor="years-to-maturity">Years to Maturity</label>
       <input
-        id="yield-to-maturity"
+        id="years-to-maturity"
         type="number"
-        value={yieldToMaturity}
-        onChange={(e) => setYieldToMaturity(e.target.value)}
+        value={yearsToMaturity}
+        onChange={(e) => setYearsToMaturity(e.target.value)}
       />
 
       <label htmlFor="credit-rating">Credit Rating</label>
@@ -79,10 +104,68 @@ const InputForm = ({ onSubmit }) => {
         value={issuer}
         onChange={(e) => setIssuer(e.target.value)}
       />
+      
+      <label htmlFor="bond-cusip">Bond Cusip</label>
+      <input
+        id="bond-cusip"
+        type="text"
+        value={bondCusip}
+        onChange={(e) => setBondCusip(e.target.value)}
+      />
 
-      <button type="submit">Submit</button>
-    </form>
-  );
-};
-
-export default InputForm;
+      <label htmlFor="use-api-data">Use API Data</label>
+      <input
+              id="use-api-data"
+              type="checkbox"
+              checked={useApiData}
+              onChange={(e) => setUseApiData(e.target.checked)}
+            />
+        
+            {/* Add optional inputs for bond price, yield to maturity, risk-free yield, benchmark yield, and option value */}
+            <label htmlFor="optional-bond-price">Bond Price (optional)</label>
+            <input
+              id="optional-bond-price"
+              type="number"
+              value={optionalBondPrice}
+              onChange={(e) => setOptionalBondPrice(e.target.value)}
+            />
+        
+            <label htmlFor="optional-ytm">Yield to Maturity (optional)</label>
+            <input
+              id="optional-ytm"
+              type="number"
+              value={optionalYtm}
+              onChange={(e) => setOptionalYtm(e.target.value)}
+            />
+        
+            <label htmlFor="optional-risk-free-yield">Risk-Free Yield (optional)</label>
+            <input
+              id="optional-risk-free-yield"
+              type="number"
+              value={optionalRiskFreeYield}
+              onChange={(e) => setOptionalRiskFreeYield(e.target.value)}
+            />
+        
+            <label htmlFor="optional-benchmark-yield">Benchmark Yield (optional)</label>
+            <input
+              id="optional-benchmark-yield"
+              type="number"
+              value={optionalBenchmarkYield}
+              onChange={(e) => setOptionalBenchmarkYield(e.target.value)}
+            />
+        
+            <label htmlFor="optional-option-value">Option Value (optional)</label>
+            <input
+              id="optional-option-value"
+              type="number"
+              value={optionalOptionValue}
+              onChange={(e) => setOptionalOptionValue(e.target.value)}
+            />
+        
+            <button type="submit">Submit</button>
+          </form>
+        );
+        };
+        
+        export default InputForm;
+        

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import InputForm from './components/InputForm';
 import MetricsSelection from './components/MetricsSelection';
 import DataDisplay from './components/DataDisplay';
@@ -12,18 +13,31 @@ const App = () => {
 
   const handleFormSubmit = (data) => {
     setBondData(data);
-    // Here you can call your API to process the bond data and calculate the metrics
-    // Update the calculatedData state with the response from the API
   };
 
   const handleMetricsChange = (metricId, isSelected) => {
     setSelectedMetrics({ ...selectedMetrics, [metricId]: isSelected });
   };
 
-  const fetchDataAndCalculateMetrics = () => {
-    // Fetch data from the API and calculate the metrics based on bondData and selectedMetrics
-    // Update the calculatedData state with the calculated metrics
-    // If an error occurs, update the error state
+  const fetchDataAndCalculateMetrics = async () => {
+    try {
+      const response = await axios.post('/api/process_bond_data/', {
+        bondData: bondData,
+        selectedMetrics: selectedMetrics,
+        useApiData: bondData.useApiData,
+        optionalData: {
+          bondPrice: bondData.optionalBondPrice,
+          yieldToMaturity: bondData.optionalYtm,
+          riskFreeYield: bondData.optionalRiskFreeYield,
+          benchmarkYield: bondData.optionalBenchmarkYield,
+          optionValue: bondData.optionalOptionValue,
+        },
+      });
+      setCalculatedData(response.data);
+      setError(null);
+    } catch (err) {
+      setError(err.message || 'An error occurred while fetching data.');
+    }
   };
 
   return (
