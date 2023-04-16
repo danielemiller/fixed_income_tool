@@ -165,7 +165,7 @@ requests-toolbelt==0.10.1
 rfc3986==1.5.0
 rubicon-objc==0.4.2
 schedule==1.1.0
-scipy==1.6.1 --no-binary=scipy
+scipy==1.7.3
 scikit-learn==1.1.1
 selenium==4.4.3
 semver==2.13.0
