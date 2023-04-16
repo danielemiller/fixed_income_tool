@@ -155,8 +155,6 @@ QuantLib==1.29
 QuantLib-Python==1.18
 querystring-parser==1.2.4
 readme-renderer==37.3
-realtime==1.0.0
-realtime-py==0.1.3
 recordlinkage==0.15
 requests==2.25.1
 requests-toolbelt==0.10.1
