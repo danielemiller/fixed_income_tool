@@ -1,6 +1,7 @@
 // DataDisplay.js
 import React from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
+import './styles/DataDisplay.css';
 
 const DataDisplay = ({ data }) => {
   const chartData = Object.keys(data).map((key) => ({ name: key, value: data[key] }));

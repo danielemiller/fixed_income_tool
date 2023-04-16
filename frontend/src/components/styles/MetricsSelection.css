@@ -1,0 +1,11 @@
+.metrics-selection {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .metrics-selection input[type='checkbox'] {
+    margin-right: 0.5rem;
+  }
+  

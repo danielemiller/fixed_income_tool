@@ -1,4 +1,5 @@
 import React from 'react';
+import './styles/ErrorHandling.css';
 
 const ErrorHandling = ({ error }) => {
   if (!error) {

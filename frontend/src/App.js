@@ -4,6 +4,7 @@ import InputForm from './components/InputForm';
 import MetricsSelection from './components/MetricsSelection';
 import DataDisplay from './components/DataDisplay';
 import ErrorHandling from './components/ErrorHandling';
+import './App.css';
 
 const App = () => {
   const [bondData, setBondData] = useState({});

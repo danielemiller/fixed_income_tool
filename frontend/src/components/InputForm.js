@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import './styles/InputForm.css';
 
 const InputForm = ({ onSubmit }) => {
   const [issueDate, setIssueDate] = useState('');

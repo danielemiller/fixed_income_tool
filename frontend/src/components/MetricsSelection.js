@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import './styles/MetricsSelection.css';
 
 const metrics = [
   { id: 'bondPrice', label: 'Bond Price' },
