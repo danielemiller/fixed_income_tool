@@ -178,7 +178,6 @@ sqlparse==0.4.2
 stack-data==0.3.0
 StrEnum==0.4.10
 supabase-py==0.0.2
-supafunc==0.2.2
 tabulate==0.8.10
 tenacity==8.0.1
 terminado==0.15.0
