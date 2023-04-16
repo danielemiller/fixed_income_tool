@@ -176,7 +176,6 @@ soupsieve==2.3.2.post1
 SQLAlchemy==1.4.39
 sqlparse==0.4.2
 stack-data==0.3.0
-storage3==0.5.2
 StrEnum==0.4.10
 supabase==1.0.3
 supabase-py==0.0.2
