@@ -23,7 +23,7 @@ supabase = supabase_py.create_client(SUPABASE_URL, SUPABASE_API_KEY)
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = 'fixed_income'
+SECRET_KEY = db_config.DJANGO_SECRET_KEY
 
 DEBUG = True
 
