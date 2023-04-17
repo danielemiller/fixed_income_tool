@@ -1,29 +1,41 @@
 # backend/config/settings.py
 from pathlib import Path
 import sys
+import os
 import supabase_py
 import importlib.util
 
-# Load the .db_config.py file
-spec = importlib.util.spec_from_file_location("db_config", Path(__file__).resolve().parent / ".db_config.py")
-db_config = importlib.util.module_from_spec(spec)
-spec.loader.exec_module(db_config)
+ON_HEROKU = os.environ.get("ON_HEROKU")
 
-SUPABASE_URL, SUPABASE_API_KEY, PG_NAME, PG_USER, PG_PW, PG_HOST, PG_PORT = (
-    db_config.SUPABASE_URL,
-    db_config.SUPABASE_API_KEY,
-    db_config.PG_NAME,
-    db_config.PG_USER,
-    db_config.PG_PW,
-    db_config.PG_HOST,
-    db_config.PG_PORT,
-)
+if ON_HEROKU:
+    SUPABASE_URL = os.environ.get("SUPABASE_URL")
+    SUPABASE_API_KEY = os.environ.get("SUPABASE_API_KEY")
+    PG_NAME = os.environ.get("PG_NAME")
+    PG_USER = os.environ.get("PG_USER")
+    PG_PW = os.environ.get("PG_PW")
+    PG_HOST = os.environ.get("PG_HOST")
+    PG_PORT = os.environ.get("PG_PORT")
+else:
+    # Load the .db_config.py file
+    spec = importlib.util.spec_from_file_location("db_config", Path(__file__).resolve().parent / ".db_config.py")
+    db_config = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(db_config)
+
+    SUPABASE_URL, SUPABASE_API_KEY, PG_NAME, PG_USER, PG_PW, PG_HOST, PG_PORT = (
+        db_config.SUPABASE_URL,
+        db_config.SUPABASE_API_KEY,
+        db_config.PG_NAME,
+        db_config.PG_USER,
+        db_config.PG_PW,
+        db_config.PG_HOST,
+        db_config.PG_PORT,
+    )
 
 supabase = supabase_py.create_client(SUPABASE_URL, SUPABASE_API_KEY)
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = db_config.DJANGO_SECRET_KEY
+SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY") if ON_HEROKU else db_config.DJANGO_SECRET_KEY
 
 DEBUG = True
 
