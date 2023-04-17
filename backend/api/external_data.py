@@ -20,7 +20,6 @@ APP_ID = FASTTRACK_APP_ID
 ACCOUNT_NUMBER = FASTTRACK_ACCOUNT_NUMBER
 PASSWORD = FASTTRACK_PASSWORD
 
-
 def authenticate():
     url = "https://ftl.fasttrack.net/v1/auth/login"
     headers = {"Content-Type": "application/json"}
@@ -29,22 +28,25 @@ def authenticate():
         "appid": APP_ID,
         "pass": PASSWORD,
     }
-
+    print(f"ACCOUNT_NUMBER={ACCOUNT_NUMBER}")
+    print(f"APP_ID={APP_ID}")
+    print(f"PASSWORD={PASSWORD}")
     response = requests.get(url, headers=headers, params=params)
     if response.status_code != 200:
         print("Authentication response content:", response.content)
     response.raise_for_status()
     data = response.json()
 
-    if 'Token' not in data:
+    if 'token' not in data:
         raise ValueError("Authentication failed. Please check your credentials in the config file or environment variables.")
 
-    return data['Token']
+    return data['token']
 
 
 def get_bond_data(cusip, start_date=None, end_date=None):
     token = authenticate()
     url = f'https://ftl.fasttrack.net/v1/bonds/{cusip}/data'
+    print(f"url={url}")
     headers = {
         'appid': APP_ID,
         'token': token
