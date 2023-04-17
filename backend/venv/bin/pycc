@@ -1,0 +1,3 @@
+#!/Users/danielmiller/Documents/Development/portfolio projects/finance/fixed_income_tool/backend/venv/bin/python3
+from numba.pycc import main
+main()
