@@ -13,14 +13,14 @@ def parse_input_data(data):
     credit_rating = bond_data.get('credit_rating', '')
     currency = bond_data.get('currency', '')
     issuer = bond_data.get('issuer', '')
-    bond_symbol = bond_data.get('bond_symbol', '')
+    bond_cusip = bond_data.get('bond_cusip', '')
     years_to_maturity = (maturity_date - issue_date).days // 365
     payment_schedule = bond_data.get('payment_schedule', '')
 
     use_api_data = bond_data.get('use_api_data', False)
 
     if use_api_data:
-        bond_price = get_bond_price(bond_symbol) if not optional_data.get('bondPrice') else float(optional_data['bondPrice'])
+        bond_price = get_bond_price(bond_cusip) if not optional_data.get('bondPrice') else float(optional_data['bondPrice'])
         risk_free_yield = get_risk_free_yield() if not optional_data.get('riskFreeYield') else float(optional_data['riskFreeYield']) / 100
         benchmark_yield = get_benchmark_yield() if not optional_data.get('benchmarkYield') else float(optional_data['benchmarkYield']) / 100
         option_value = calculate_option_value(issuer, currency) if not optional_data.get('optionValue') else float(optional_data['optionValue'])
