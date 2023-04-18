@@ -27,6 +27,8 @@ const App = () => {
         selectedMetrics: selectedMetrics,
         useApiData: bondData.useApiData,
         optionalData: {
+          issuer: bondData.issuer,
+          currency: bondData.currency,
           bondPrice: bondData.optionalBondPrice,
           yieldToMaturity: bondData.optionalYtm,
           riskFreeYield: bondData.optionalRiskFreeYield,

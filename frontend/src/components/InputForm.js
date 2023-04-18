@@ -16,6 +16,12 @@ const InputForm = ({ onSubmit }) => {
   const [optionalRiskFreeYield, setOptionalRiskFreeYield] = useState('');
   const [optionalBenchmarkYield, setOptionalBenchmarkYield] = useState('');
   const [optionalOptionValue, setOptionalOptionValue] = useState('');
+  const [optionType, setOptionType] = useState('');
+  const [strikePrice, setStrikePrice] = useState('');
+  const [underlyingPrice, setUnderlyingPrice] = useState('');
+  const [riskFreeRate, setRiskFreeRate] = useState('');
+  const [volatility, setVolatility] = useState('');
+  const [expirationDate, setExpirationDate] = useState('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -25,16 +31,24 @@ const InputForm = ({ onSubmit }) => {
       coupon_rate: couponRate,
       years_to_maturity: yearsToMaturity,
       credit_rating: creditRating,
-      currency: currency,
-      issuer: issuer,
       bond_cusip: bondCusip,
       use_api_data: useApiData,
       optional_data: {
+        issuer: issuer,
+        currency: currency,
         bond_price: optionalBondPrice,
         ytm: optionalYtm,
         risk_free_yield: optionalRiskFreeYield,
         benchmark_yield: optionalBenchmarkYield,
         option_value: optionalOptionValue,
+        option_value_calculation: {
+          option_type: optionType,
+          strike_price: strikePrice,
+          underlying_price: underlyingPrice,
+          risk_free_rate: riskFreeRate,
+          volatility: volatility,
+          expiration_date: expirationDate,
+        },
       },
     });
   };
@@ -42,131 +56,243 @@ const InputForm = ({ onSubmit }) => {
 
   return (
     <form data-testid="input-form" onSubmit={handleSubmit}>
-      <label htmlFor="issue-date">Issue Date</label>
-      <input
-        id="issue-date"
-        type="date"
-        value={issueDate}
-        onChange={(e) => setIssueDate(e.target.value)}
-      />
+      <h3>Required Inputs</h3>
 
-      <label htmlFor="maturity-date">Maturity Date</label>
-      <input
-        id="maturity-date"
-        type="date"
-        value={maturityDate}
-        onChange={(e) => setMaturityDate(e.target.value)}
-      />
+      <div className="form-field">
+        <label htmlFor="issue-date">Issue Date</label>
+        <input
+          id="issue-date"
+          type="date"
+          value={issueDate}
+          onChange={(e) => setIssueDate(e.target.value)}
+        />
+      </div>
 
-      <label htmlFor="coupon-rate">Coupon Rate</label>
-      <input
-        id="coupon-rate"
-        type="number"
-        value={couponRate}
-        onChange={(e) => setCouponRate(e.target.value)}
-      />
+      <div className="form-field">
+        <label htmlFor="maturity-date">Maturity Date</label>
+        <input
+          id="maturity-date"
+          type="date"
+          value={maturityDate}
+          onChange={(e) => setMaturityDate(e.target.value)}
+        />
+      </div>
 
-      <label htmlFor="years-to-maturity">Years to Maturity</label>
-      <input
-        id="years-to-maturity"
-        type="number"
-        value={yearsToMaturity}
-        onChange={(e) => setYearsToMaturity(e.target.value)}
-      />
+      <div className="form-field">
+        <label htmlFor="coupon-rate">Coupon Rate</label>
+        <input
+          id="coupon-rate"
+          type="number"
+          value={couponRate}
+          onChange={(e) => setCouponRate(e.target.value)}
+        />
+      </div>
 
-      <label htmlFor="credit-rating">Credit Rating</label>
-      <select
-        id="credit-rating"
-        value={creditRating}
-        onChange={(e) => setCreditRating(e.target.value)}
-      >
-        {/* Add available credit ratings */}
-        <option value="AAA">AAA</option>
-        <option value="AA+">AA+</option>
-        {/* ... */}
-      </select>
+      <div className="form-field">
+        <label htmlFor="years-to-maturity">Years to Maturity</label>
+        <input
+          id="years-to-maturity"
+          type="number"
+          value={yearsToMaturity}
+          onChange={(e) => setYearsToMaturity(e.target.value)}
+        />
+      </div>
 
-      <label htmlFor="currency">Currency</label>
-      <select
-        id="currency"
-        value={currency}
-        onChange={(e) => setCurrency(e.target.value)}
-      >
-        {/* Add available currencies */}
-        <option value="USD">USD</option>
-        <option value="EUR">EUR</option>
-        {/* ... */}
-      </select>
-
-      <label htmlFor="issuer">Issuer</label>
-      <input
-        id="issuer"
-        type="text"
-        value={issuer}
-        onChange={(e) => setIssuer(e.target.value)}
-      />
+      <div className="form-field">
+        <label htmlFor="credit-rating">Credit Rating</label>
+        <select
+          id="credit-rating"
+          value={creditRating}
+          onChange={(e) => setCreditRating(e.target.value)}
+        >
+          <option value="AAA">AAA</option>
+          <option value="AA+">AA+</option>
+          <option value="AA">AA</option>
+          <option value="AA-">AA-</option>
+          <option value="A+">A+</option>
+          <option value="A">A</option>
+          <option value="A-">A-</option>
+          <option value="BBB+">BBB+</option>
+          <option value="BBB">BBB</option>
+          <option value="BBB-">BBB-</option>
+          <option value="BB+">BB+</option>
+          <option value="BB">BB</option>
+          <option value="BB-">BB-</option>
+          <option value="B+">B+</option>
+          <option value="B">B</option>
+          <option value="B-">B-</option>
+          <option value="CCC+">CCC+</option>
+          <option value="CCC">CCC</option>
+          <option value="CCC-">CCC-</option>
+          <option value="CC">CC</option>
+          <option value="C">C</option>
+          <option value="D">D</option>
+        </select>
+      </div>
       
-      <label htmlFor="bond-cusip">Bond Cusip</label>
-      <input
-        id="bond-cusip"
-        type="text"
-        value={bondCusip}
-        onChange={(e) => setBondCusip(e.target.value)}
-      />
+      <div className="form-field">
+        <label htmlFor="bond-cusip">Bond Cusip</label>
+        <input
+          id="bond-cusip"
+          type="text"
+          value={bondCusip}
+          onChange={(e) => setBondCusip(e.target.value)}
+        />
+      </div>
 
-      <label htmlFor="use-api-data">Use API Data</label>
-      <input
-              id="use-api-data"
-              type="checkbox"
-              checked={useApiData}
-              onChange={(e) => setUseApiData(e.target.checked)}
-            />
+      <h3>Optional Inputs</h3>
+
+      <div className="form-field">
+        <label htmlFor="use-api-data">Use API Data</label>
+        <input
+          id="use-api-data"
+          type="checkbox"
+          checked={useApiData}
+          onChange={(e) => setUseApiData(e.target.checked)}
+        />
+      </div>
+
+      <div className="form-field">
+        <label htmlFor="optional-bond-price">Bond Price (optional)</label>
+        <input
+          id="optional-bond-price"
+          type="number"
+          value={optionalBondPrice}
+          onChange={(e) => setOptionalBondPrice(e.target.value)}
+        />
+      </div>
+
+      <div className="form-field">
+        <label htmlFor="currency">Currency</label>
+        <select
+          id="currency"
+          value={currency}
+          onChange={(e) => setCurrency(e.target.value)}
+        >
+          {/* Add available currencies */}
+          <option value="USD">USD</option>
+          <option value="EUR">EUR</option>
+          {/* ... */}
+        </select>
+      </div>
+
+      <div className="form-field">
+        <label htmlFor="issuer">Issuer</label>
+        <input
+          id="issuer"
+          type="text"
+          value={issuer}
+          onChange={(e) => setIssuer(e.target.value)}
+        />
+      </div>
+
+      <div className="form-field">
+        <label htmlFor="optional-ytm">Yield to Maturity (optional)</label>
+        <input
+          id="optional-ytm"
+          type="number"
+          value={optionalYtm}
+          onChange={(e) => setOptionalYtm(e.target.value)}
+        />
+      </div>
+
+      <div className="form-field">
+        <label htmlFor="optional-risk-free-yield">Risk-Free Yield (optional)</label>
+        <input
+          id="optional-risk-free-yield"
+          type="number"
+          value={optionalRiskFreeYield}
+          onChange={(e) => setOptionalRiskFreeYield(e.target.value)}
+        />
+      </div>
+
+      <div className="form-field">
+        <label htmlFor="optional-benchmark-yield">Benchmark Yield (optional)</label>
+        <input
+          id="optional-benchmark-yield"
+          type="number"
+          value={optionalBenchmarkYield}
+          onChange={(e) => setOptionalBenchmarkYield(e.target.value)}
+        />
+      </div>
+
+      <div className="form-field">
+        <label htmlFor="optional-option-value">Option Value (optional)</label>
+        <input
+          id="optional-option-value"
+          type="number"
+          value={optionalOptionValue}
+          onChange={(e) => setOptionalOptionValue(e.target.value)}
+        />
+      </div>
+
+      <h3>Option Value Calculation (optional)</h3>
+
+      <div className="form-field">
+        <label htmlFor="option-type">Option Type</label>
+        <select
+          id="option-type"
+          value={optionType}
+          onChange={(e) => setOptionType(e.target.value)}
+        >
+          {/* ... option-type select options ... */}
+        </select>
+      </div>
+
+      <div className="form-field">
+        <label htmlFor="strike-price">Strike Price</label>
+        <input
+          id="strike-price"
+          type="number"
+          value={strikePrice}
+          onChange={(e) => setStrikePrice(e.target.value)}
+        />
+      </div>
+
+      <div className="form-field">
+        <label htmlFor="underlying-price">Underlying Price</label>
+        <input
+          id="underlying-price"
+          type="number"
+          value={underlyingPrice}
+          onChange={(e) => setUnderlyingPrice(e.target.value)}
+        />
+      </div>
+
+      <div className="form-field">
+        <label htmlFor="risk-free-rate">Risk-Free Rate</label>
+        <input
+          id="risk-free-rate"
+          type="number"
+          value={riskFreeRate}
+          onChange={(e) => setRiskFreeRate(e.target.value)}
+        />
+      </div>
+
+      <div className="form-field">
+        <label htmlFor="volatility">Volatility</label>
+        <input
+          id="volatility"
+          type="number"
+          value={volatility}
+          onChange={(e) => setVolatility(e.target.value)}
+        />
+      </div>
+
+      <div className="form-field">
+        <label htmlFor="expiration-date">Expiration Date</label>
+        <input
+          id="expiration-date"
+          type="date"
+          value={expirationDate}
+          onChange={(e) => setExpirationDate(e.target.value)}
+        />
+      </div>
+
+      <button type="submit">Submit</button>
+    </form>
+  );
+};
         
-            {/* Add optional inputs for bond price, yield to maturity, risk-free yield, benchmark yield, and option value */}
-            <label htmlFor="optional-bond-price">Bond Price (optional)</label>
-            <input
-              id="optional-bond-price"
-              type="number"
-              value={optionalBondPrice}
-              onChange={(e) => setOptionalBondPrice(e.target.value)}
-            />
-        
-            <label htmlFor="optional-ytm">Yield to Maturity (optional)</label>
-            <input
-              id="optional-ytm"
-              type="number"
-              value={optionalYtm}
-              onChange={(e) => setOptionalYtm(e.target.value)}
-            />
-        
-            <label htmlFor="optional-risk-free-yield">Risk-Free Yield (optional)</label>
-            <input
-              id="optional-risk-free-yield"
-              type="number"
-              value={optionalRiskFreeYield}
-              onChange={(e) => setOptionalRiskFreeYield(e.target.value)}
-            />
-        
-            <label htmlFor="optional-benchmark-yield">Benchmark Yield (optional)</label>
-            <input
-              id="optional-benchmark-yield"
-              type="number"
-              value={optionalBenchmarkYield}
-              onChange={(e) => setOptionalBenchmarkYield(e.target.value)}
-            />
-        
-            <label htmlFor="optional-option-value">Option Value (optional)</label>
-            <input
-              id="optional-option-value"
-              type="number"
-              value={optionalOptionValue}
-              onChange={(e) => setOptionalOptionValue(e.target.value)}
-            />
-        
-            <button type="submit">Submit</button>
-          </form>
-        );
-        };
-        
-        export default InputForm;
+export default InputForm;
         
