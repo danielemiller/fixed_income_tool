@@ -26,10 +26,10 @@ def parse_input_data(data):
         option_value = calculate_option_value(issuer, currency) if not optional_data.get('optionValue') else float(optional_data['optionValue'])
 
         # Calculate yield_to_maturity using the calculation_engine
-        yield_to_maturity = yield_to_maturity(bond_price, 1000, coupon_rate, years_to_maturity)
+        ytm = yield_to_maturity(bond_price, 1000, coupon_rate, years_to_maturity)
     else:
         bond_price = float(optional_data.get('bondPrice', 0))
-        yield_to_maturity = float(optional_data.get('yieldToMaturity', 0)) / 100
+        ytm = float(optional_data.get('yieldToMaturity', 0)) / 100
         risk_free_yield = float(optional_data.get('riskFreeYield', 0)) / 100
         benchmark_yield = float(optional_data.get('benchmarkYield', 0)) / 100
         option_value = float(optional_data.get('optionValue', 0))
@@ -40,7 +40,7 @@ def parse_input_data(data):
     return {
         'face_value': 1000,
         'coupon_rate': coupon_rate,
-        'yield_to_maturity': yield_to_maturity,
+        'yield_to_maturity': ytm,
         'years_to_maturity': years_to_maturity,
         'credit_rating': credit_rating,
         'currency': currency,
