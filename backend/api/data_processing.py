@@ -6,6 +6,7 @@ from .option_value import calculate_option_value
 def parse_input_data(data):
     bond_data = data.get('bondData', {})
     optional_data = data.get('optionalData', {})
+    option_value_calculation_data = optional_data.get('option_value_calculation', {})
 
     issue_date = parse_date(bond_data.get('issue_date', ''))
     maturity_date = parse_date(bond_data.get('maturity_date', ''))
@@ -23,7 +24,7 @@ def parse_input_data(data):
         bond_price = get_bond_price(bond_cusip) if not optional_data.get('bondPrice') else float(optional_data['bondPrice'])
         risk_free_yield = get_risk_free_yield() if not optional_data.get('riskFreeYield') else float(optional_data['riskFreeYield']) / 100
         benchmark_yield = get_benchmark_yield() if not optional_data.get('benchmarkYield') else float(optional_data['benchmarkYield']) / 100
-        option_value = calculate_option_value(issuer, currency) if not optional_data.get('optionValue') else float(optional_data['optionValue'])
+        option_value = calculate_option_value(option_value_calculation_data) if not optional_data.get('optionValue') else float(optional_data['optionValue'])
 
         # Calculate yield_to_maturity using the calculation_engine
         ytm = yield_to_maturity(bond_price, 1000, coupon_rate, years_to_maturity)
