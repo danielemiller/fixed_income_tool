@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from .external_data import get_bond_price, get_risk_free_yield, get_benchmark_yield
 from .calculation_engine import yield_to_maturity
 from .option_value import calculate_option_value
@@ -19,6 +19,9 @@ def parse_input_data(data, call_premium_percentage=0.03):
     bond_cusip = bond_data.get('bond_cusip', '')
     years_to_maturity = (maturity_date - issue_date).days // 365
     payment_schedule = bond_data.get('payment_schedule', '')
+
+    if not payment_schedule:
+        payment_schedule = calculate_payment_schedule(issue_date, maturity_date, coupon_rate, face_value)
 
     use_api_data = data.get('useApiData', False)
     is_call_option_selected = data.get('isCallOptionSelected', False)
@@ -45,7 +48,7 @@ def parse_input_data(data, call_premium_percentage=0.03):
             years_to_call = calculate_years_to_call(date_first_par_call, issue_date.strftime('%Y%m%d'))
     
     call_price = float(bond_data.get('call_price', 0))
-    
+
     if call_price == 0:
         face_value = 1000
         call_price = estimate_call_price(face_value, call_premium_percentage)
@@ -96,3 +99,18 @@ def calculate_years_to_call(date_first_par_call, analysis_date):
 def estimate_call_price(face_value, premium_percentage):
     call_price = face_value * (1 + premium_percentage)
     return call_price
+
+def calculate_payment_schedule(issue_date, maturity_date, coupon_rate, face_value):
+    payment_schedule = []
+    payment_amount = face_value * (coupon_rate / 100) / 2  # Assuming semi-annual payments
+
+    payment_date = issue_date
+    while payment_date <= maturity_date:
+        payment_schedule.append({
+            "payment_date": payment_date.strftime("%Y-%m-%d"),
+            "payment": payment_amount,
+        })
+
+        payment_date += timedelta(days=6*30)  # Assuming semi-annual payments
+
+    return payment_schedule
