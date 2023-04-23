@@ -36,6 +36,7 @@ const App = () => {
           riskFreeYield: bondData.optionalRiskFreeYield,
           benchmarkYield: bondData.optionalBenchmarkYield,
           optionValue: bondData.optionalOptionValue,
+          optionValueCalculation: bondData.optionalData.optionValueCalculation,
         },
       });
       setCalculatedData(response.data);
