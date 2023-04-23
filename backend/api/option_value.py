@@ -15,6 +15,14 @@ def calculate_option_value(option_data):
     expiration_date_dt = datetime.strptime(expiration_date_str, "%Y-%m-%d")
     expiration_date = ql.Date(expiration_date_dt.day, expiration_date_dt.month, expiration_date_dt.year)
 
+    print("Option data:", option_data)
+    print("Option type:", option_type)
+    print("Strike price:", strike_price)
+    print("Underlying price:", underlying_price)
+    print("Risk-free rate:", risk_free_rate)
+    print("Volatility:", volatility)
+    print("Expiration date:", expiration_date)
+
     # Set up the option pricing environment
     calendar = ql.TARGET()
     calculation_date = ql.Date.todaysDate()

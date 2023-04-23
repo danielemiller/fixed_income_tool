@@ -6,7 +6,7 @@ from .option_value import calculate_option_value
 def parse_input_data(data, call_premium_percentage=0.03):
     bond_data = data.get('bondData', {})
     optional_data = data.get('optionalData', {})
-    option_value_calculation_data = bond_data.get('optional_data', {}).get('option_value_calculation', {})
+    option_value_calculation_data = bond_data.get('optionalData', {}).get('optionValueCalculation', {})
 
 
     issue_date = parse_date(bond_data.get('issue_date', ''))
@@ -20,6 +20,12 @@ def parse_input_data(data, call_premium_percentage=0.03):
     bond_cusip = bond_data.get('bond_cusip', '')
     years_to_maturity = (maturity_date - issue_date).days // 365
     payment_schedule = bond_data.get('payment_schedule', '')
+
+    strike_price = option_value_calculation_data.get('strike_price', 0)
+    underlying_price = option_value_calculation_data.get('underlying_price', 0)
+    risk_free_rate = float(option_value_calculation_data.get('risk_free_rate', 0)) / 100
+    volatility = option_value_calculation_data.get('volatility', 0)
+    expiration_date = parse_date(option_value_calculation_data.get('expiration_date', ''))
 
     if not payment_schedule:
         payment_schedule = calculate_payment_schedule(issue_date, maturity_date, coupon_rate, face_value)
@@ -74,6 +80,11 @@ def parse_input_data(data, call_premium_percentage=0.03):
         'option_value': option_value,
         'years_to_call': years_to_call,
         'call_price': call_price,
+        'strike_price': strike_price,
+        'underlying_price': underlying_price,
+        'risk_free_rate': risk_free_rate,
+        'volatility': volatility,
+        'expiration_date': expiration_date
     }
 
 def parse_date(date_string):
