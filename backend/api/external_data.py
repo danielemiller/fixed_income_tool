@@ -28,9 +28,6 @@ def authenticate():
         "appid": APP_ID,
         "pass": PASSWORD,
     }
-    print(f"ACCOUNT_NUMBER={ACCOUNT_NUMBER}")
-    print(f"APP_ID={APP_ID}")
-    print(f"PASSWORD={PASSWORD}")
     response = requests.get(url, headers=headers, params=params)
     if response.status_code != 200:
         print("Authentication response content:", response.content)

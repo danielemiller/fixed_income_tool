@@ -2,15 +2,18 @@ import math
 from scipy.optimize import brentq, root_scalar
 
 def bond_price(face_value, coupon_rate, yield_to_maturity, years_to_maturity):
+    print(f'Calculating bond price using face value: {face_value}, coupon rate: {coupon_rate}, yield to maturity: {yield_to_maturity}, years to maturity: {years_to_maturity}')
     coupon_payment = face_value * coupon_rate
 
     present_value_coupon_payments = sum([coupon_payment * math.exp(-yield_to_maturity * t) for t in range(1, years_to_maturity + 1)])
     present_value_face_value = face_value * math.exp(-yield_to_maturity * years_to_maturity)
 
+    print("bond price calculation: " + present_value_coupon_payments + present_value_face_value)
     return present_value_coupon_payments + present_value_face_value
 
 
 def yield_to_maturity(bond_price_value, face_value, coupon_rate, years_to_maturity):
+    print('Calculating yield to maturity')
     def f(y):
         # Ensure bond_price_value is a float
         bond_price_value_float = float(bond_price_value)
@@ -20,6 +23,7 @@ def yield_to_maturity(bond_price_value, face_value, coupon_rate, years_to_maturi
 
 
 def yield_to_call(bond_price, face_value, coupon_rate, years_to_call, call_price):
+    print('Calculating yield to call')
     def f(y):
         present_value_sum = sum([(face_value * coupon_rate) / ((1 + y) ** i) for i in range(1, int(years_to_call * 2) + 1)])
         present_value_call = call_price / ((1 + y) ** (years_to_call * 2))
@@ -41,15 +45,18 @@ def yield_to_call(bond_price, face_value, coupon_rate, years_to_call, call_price
 
 
 def average_life(payment_schedule):
+    print('Calculating average life')
     weighted_payments = [t * pmt['payment'] for t, pmt in enumerate(payment_schedule, 1)]
     return sum(weighted_payments) / sum(pmt['payment'] for pmt in payment_schedule)
 
 
 def yield_curve(spot_rates, time_to_maturities):
+    print('Calculating yield curves...')
     return [(t, r) for t, r in zip(time_to_maturities, spot_rates)]
 
 
 def duration(face_value, coupon_rate, yield_to_maturity, years_to_maturity):
+    print('Calculating duration')
     coupon_payment = face_value * coupon_rate
     discount_rate = 1 + yield_to_maturity
 
@@ -60,6 +67,7 @@ def duration(face_value, coupon_rate, yield_to_maturity, years_to_maturity):
 
 
 def convexity(face_value, coupon_rate, yield_to_maturity, years_to_maturity):
+    print('Calculating convexity')
     coupon_payment = face_value * coupon_rate
     discount_rate = 1 + yield_to_maturity
 
@@ -70,10 +78,12 @@ def convexity(face_value, coupon_rate, yield_to_maturity, years_to_maturity):
 
 
 def credit_spread(bond_yield, risk_free_yield):
+    print('Calculating credit spread')
     return bond_yield - risk_free_yield
 
 
 def option_adjusted_spread(bond_yield, benchmark_yield, option_value):
+    print('calculating option adjusted spread')
     return (bond_yield - benchmark_yield) - option_value
 
 def calculate_bond_metrics(parsed_data, selected_metrics):
@@ -108,4 +118,6 @@ def calculate_bond_metrics(parsed_data, selected_metrics):
         if 'spot_rates' in parsed_data and 'time_to_maturities' in parsed_data:
             output_data['yield_curve'] = yield_curve(parsed_data['spot_rates'], parsed_data['time_to_maturities'])
 
+    print('Bond metrics:')
+    print(output_data)
     return output_data

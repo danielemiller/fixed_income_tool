@@ -4,6 +4,7 @@ from .calculation_engine import yield_to_maturity
 from .option_value import calculate_option_value
 
 def parse_input_data(data, call_premium_percentage=0.03):
+    print('Parsing data input...')
     bond_data = data.get('bondData', {})
     optional_data = data.get('optionalData', {})
     option_value_calculation_data = bond_data.get('optionalData', {}).get('optionValueCalculation', {})
@@ -91,6 +92,7 @@ def parse_date(date_string):
     return datetime.strptime(date_string, '%Y-%m-%d').date()
 
 def format_output_data(output_data):
+    print('formatting data...')
     formatted_output = {
         key: '{:,.2f}'.format(value) if isinstance(value, float) else value
         for key, value in output_data.items()
@@ -106,6 +108,10 @@ def format_output_data(output_data):
     if 'average_life' in output_data:
         formatted_output['average_life'] = '{:.2f} years'.format(output_data['average_life'])
 
+    print('Data:')
+    print(format_output_data)
+    print('formatted output:')
+    print(formatted_output)
     return formatted_output
 
 def calculate_years_to_call(date_first_par_call, analysis_date):
@@ -120,6 +126,7 @@ def estimate_call_price(face_value, premium_percentage):
     return call_price
 
 def calculate_payment_schedule(issue_date, maturity_date, coupon_rate, face_value):
+    print('calculating payment schedule...')
     payment_schedule = []
     payment_amount = face_value * (coupon_rate / 100) / 2  # Assuming semi-annual payments
 
@@ -132,4 +139,6 @@ def calculate_payment_schedule(issue_date, maturity_date, coupon_rate, face_valu
 
         payment_date += timedelta(days=6*30)  # Assuming semi-annual payments
 
+    print('payment schedule: ')
+    print(payment_schedule)
     return payment_schedule
