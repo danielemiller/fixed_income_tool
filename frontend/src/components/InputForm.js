@@ -22,6 +22,8 @@ const InputForm = ({ onSubmit }) => {
   const [riskFreeRate, setRiskFreeRate] = useState('');
   const [volatility, setVolatility] = useState('');
   const [expirationDate, setExpirationDate] = useState('');
+  const [faceValue, setFaceValue] = useState('');
+  const [dateFirstParCall, setDateFirstParCall] = useState('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -32,6 +34,8 @@ const InputForm = ({ onSubmit }) => {
       years_to_maturity: yearsToMaturity,
       credit_rating: creditRating,
       bond_cusip: bondCusip,
+      face_value: faceValue,
+      date_first_par_call: dateFirstParCall,
       useApiData: useApiData, // Changed from use_api_data
       optionalData: { // Changed from optional_data
         issuer: issuer,
@@ -96,6 +100,16 @@ const InputForm = ({ onSubmit }) => {
           onChange={(e) => setYearsToMaturity(e.target.value)}
         />
       </div>
+      
+      <div className="form-field">
+        <label htmlFor="face-value">Face Value</label>
+        <input
+          id="face-value"
+          type="number"
+          value={faceValue}
+          onChange={(e) => setFaceValue(e.target.value)}
+        />
+      </div>
 
       <div className="form-field">
         <label htmlFor="credit-rating">Credit Rating</label>
@@ -129,6 +143,17 @@ const InputForm = ({ onSubmit }) => {
         </select>
       </div>
       
+      <div className="form-field">
+        <label htmlFor="dateFirstParCall">Date of First Par Call:</label>
+          <input
+            type="text"
+            id="dateFirstParCall"
+            name="dateFirstParCall"
+            value={dateFirstParCall}
+            onChange={(e) => setDateFirstParCall(e.target.value)}
+          /> 
+        </div>
+
       <div className="form-field">
         <label htmlFor="bond-cusip">Bond Cusip</label>
         <input

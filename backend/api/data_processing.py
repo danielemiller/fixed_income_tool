@@ -3,7 +3,7 @@ from .external_data import get_bond_price, get_risk_free_yield, get_benchmark_yi
 from .calculation_engine import yield_to_maturity
 from .option_value import calculate_option_value
 
-def parse_input_data(data):
+def parse_input_data(data, call_premium_percentage=0.03):
     bond_data = data.get('bondData', {})
     optional_data = data.get('optionalData', {})
     option_value_calculation_data = bond_data.get('optional_data', {}).get('option_value_calculation', {})
@@ -12,6 +12,7 @@ def parse_input_data(data):
     issue_date = parse_date(bond_data.get('issue_date', ''))
     maturity_date = parse_date(bond_data.get('maturity_date', ''))
     coupon_rate = float(bond_data.get('coupon_rate', 0)) / 100
+    face_value = bond_data.get("face_value", 1000)
     credit_rating = bond_data.get('credit_rating', '')
     currency = bond_data.get('currency', '')
     issuer = bond_data.get('issuer', '')
@@ -36,11 +37,19 @@ def parse_input_data(data):
         benchmark_yield = float(optional_data.get('benchmarkYield', 0)) / 100
         option_value = float(optional_data.get('optionValue', 0))
 
-    years_to_call = float(bond_data.get('years_to_call', 0))
+    years_to_call = None
+    if 'date_first_par_call' in bond_data:
+        date_first_par_call = bond_data.get('date_first_par_call')
+        if date_first_par_call:
+            years_to_call = calculate_years_to_call(date_first_par_call, issue_date.strftime('%Y%m%d'))
+    
     call_price = float(bond_data.get('call_price', 0))
+    if call_price == 0:
+        face_value = 1000
+        call_price = estimate_call_price(face_value, call_premium_percentage)
 
     return {
-        'face_value': 1000,
+        'face_value': face_value,
         'coupon_rate': coupon_rate,
         'yield_to_maturity': ytm,
         'years_to_maturity': years_to_maturity,
@@ -69,3 +78,14 @@ def format_output_data(output_data):
         formatted_output['yield_to_call'] = '{:.2f}%'.format(output_data['yield_to_call'] * 100)
 
     return formatted_output
+
+def calculate_years_to_call(date_first_par_call, analysis_date):
+    call_date = datetime.strptime(date_first_par_call, "%Y%m%d")
+    current_date = datetime.strptime(analysis_date, "%Y%m%d")
+    delta = call_date - current_date
+    years_to_call = delta.days / 365
+    return years_to_call
+
+def estimate_call_price(face_value, premium_percentage):
+    call_price = face_value * (1 + premium_percentage)
+    return call_price
