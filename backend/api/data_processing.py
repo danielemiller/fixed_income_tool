@@ -41,6 +41,7 @@ def parse_input_data(data, call_premium_percentage=0.03):
     if 'date_first_par_call' in bond_data:
         date_first_par_call = bond_data.get('date_first_par_call')
         if date_first_par_call:
+            date_first_par_call = date_first_par_call.replace('-', '')
             years_to_call = calculate_years_to_call(date_first_par_call, issue_date.strftime('%Y%m%d'))
     
     call_price = float(bond_data.get('call_price', 0))
