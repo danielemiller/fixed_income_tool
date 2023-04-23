@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+from collections import defaultdict
 from .external_data import get_bond_price, get_risk_free_yield, get_benchmark_yield
 from .calculation_engine import yield_to_maturity
 from .option_value import calculate_option_value
@@ -144,3 +145,4 @@ def calculate_payment_schedule(issue_date, maturity_date, coupon_rate, face_valu
     print('payment schedule: ')
     print(payment_schedule)
     return payment_schedule
+

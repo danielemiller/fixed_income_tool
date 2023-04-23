@@ -1,5 +1,8 @@
 import math
 from scipy.optimize import brentq, root_scalar
+from datetime import datetime, timedelta
+from collections import defaultdict
+from .external_data import get_bond_data_list
 
 def bond_price(face_value, coupon_rate, yield_to_maturity, years_to_maturity):
     print(f'Calculating bond price using face value: {face_value}, coupon rate: {coupon_rate}, yield to maturity: {yield_to_maturity}, years to maturity: {years_to_maturity}')
@@ -86,6 +89,16 @@ def option_adjusted_spread(bond_yield, benchmark_yield, option_value):
     print('calculating option adjusted spread')
     return (bond_yield - benchmark_yield) - option_value
 
+def estimate_spot_rates(bond_data_list):
+    spot_rates = defaultdict(list)
+    for bond_data in bond_data_list:
+        years_to_maturity = bond_data['maturity']
+        ytm = bond_data['yield_to_maturity']
+        spot_rates[years_to_maturity].append(ytm)
+
+    avg_spot_rates = {k: sum(v) / len(v) for k, v in spot_rates.items()}
+    return sorted(avg_spot_rates.items())
+
 def calculate_bond_metrics(parsed_data, selected_metrics):
     output_data = {}
 
@@ -115,8 +128,10 @@ def calculate_bond_metrics(parsed_data, selected_metrics):
             output_data['price_earnings_ratio'] = output_data['bond_price'] / parsed_data['earnings']
 
     if selected_metrics.get('yieldCurve', False):
-        if 'spot_rates' in parsed_data and 'time_to_maturities' in parsed_data:
-            output_data['yield_curve'] = yield_curve(parsed_data['spot_rates'], parsed_data['time_to_maturities'])
+        bond_data_list = get_bond_data_list()
+        spot_rates = estimate_spot_rates(bond_data_list)
+        time_to_maturities = [data[0] for data in spot_rates]
+        output_data['yield_curve'] = yield_curve([data[1] for data in spot_rates], time_to_maturities)
 
     print('Bond metrics:')
     print(output_data)
