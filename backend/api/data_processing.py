@@ -115,6 +115,7 @@ def format_output_data(output_data):
     return formatted_output
 
 def calculate_years_to_call(date_first_par_call, analysis_date):
+    print('calculating years to call...')
     call_date = datetime.strptime(date_first_par_call, "%Y%m%d")
     current_date = datetime.strptime(analysis_date, "%Y%m%d")
     delta = call_date - current_date
@@ -122,6 +123,7 @@ def calculate_years_to_call(date_first_par_call, analysis_date):
     return years_to_call
 
 def estimate_call_price(face_value, premium_percentage):
+    print('calculating estimated call price...')
     call_price = face_value * (1 + premium_percentage)
     return call_price
 

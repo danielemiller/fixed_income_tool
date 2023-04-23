@@ -78,3 +78,21 @@ def get_risk_free_yield():
 def get_benchmark_yield():
     benchmark_yield = float(fred.get_series('GS10')[-1]) / 100  # 10-Year Treasury Constant Maturity Rate
     return benchmark_yield
+
+def get_yield_data(series_id):
+    return float(fred.get_series(series_id)[-1]) / 100
+
+def get_bond_data_list(face_value=1000, coupon_rate=0.0):
+    bond_data_list = []
+    for maturity, series_id in SERIES_IDS.items():
+        yield_data = get_yield_data(series_id)
+        price = face_value * (1 + yield_data)
+        maturity_years = float(maturity.rstrip('MY'))
+        bond_data = {
+            'coupon_rate': coupon_rate,
+            'face_value': face_value,
+            'price': price,
+            'maturity': maturity_years
+        }
+        bond_data_list.append(bond_data)
+    return bond_data_list
