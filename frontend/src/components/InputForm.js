@@ -146,7 +146,7 @@ const InputForm = ({ onSubmit }) => {
       <div className="form-field">
         <label htmlFor="dateFirstParCall">Date of First Par Call:</label>
           <input
-            type="text"
+            type="date"
             id="dateFirstParCall"
             name="dateFirstParCall"
             value={dateFirstParCall}
