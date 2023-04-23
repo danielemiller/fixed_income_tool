@@ -1,6 +1,5 @@
 import math
 from scipy.optimize import brentq, root_scalar
-from datetime import datetime, timedelta
 from collections import defaultdict
 from .external_data import get_bond_data_list
 

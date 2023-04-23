@@ -82,6 +82,20 @@ def get_benchmark_yield():
 def get_yield_data(series_id):
     return float(fred.get_series(series_id)[-1]) / 100
 
+SERIES_IDS = {
+    1: 'GS1M',   # 1-month Treasury Constant Maturity Rate
+    3: 'GS3M',   # 3-month Treasury Constant Maturity Rate
+    6: 'GS6M',   # 6-month Treasury Constant Maturity Rate
+    1: 'GS1',    # 1-year Treasury Constant Maturity Rate
+    2: 'GS2',    # 2-year Treasury Constant Maturity Rate
+    3: 'GS3',    # 3-year Treasury Constant Maturity Rate
+    5: 'GS5',    # 5-year Treasury Constant Maturity Rate
+    7: 'GS7',    # 7-year Treasury Constant Maturity Rate
+    10: 'GS10',  # 10-year Treasury Constant Maturity Rate
+    20: 'GS20',  # 20-year Treasury Constant Maturity Rate
+    30: 'GS30'   # 30-year Treasury Constant Maturity Rate
+}
+
 def get_bond_data_list(face_value=1000, coupon_rate=0.0):
     bond_data_list = []
     for maturity, series_id in SERIES_IDS.items():
