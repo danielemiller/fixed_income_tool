@@ -21,12 +21,12 @@ def parse_input_data(data, call_premium_percentage=0.03):
     payment_schedule = bond_data.get('payment_schedule', '')
 
     use_api_data = data.get('useApiData', False)
+    is_call_option_selected = data.get('isCallOptionSelected', False)
 
     if use_api_data:
         bond_price = get_bond_price(bond_cusip) if not optional_data.get('bondPrice') else float(optional_data['bondPrice'])
         risk_free_yield = float(get_risk_free_yield()) if not optional_data.get('riskFreeYield') else float(optional_data['riskFreeYield']) / 100
         benchmark_yield = get_benchmark_yield() if not optional_data.get('benchmarkYield') else float(optional_data['benchmarkYield']) / 100
-        option_value = calculate_option_value(option_value_calculation_data) if not optional_data.get('optionValue') else float(optional_data['optionValue'])
 
         # Calculate yield_to_maturity using the calculation_engine
         ytm = yield_to_maturity(bond_price, 1000, coupon_rate, years_to_maturity)
@@ -35,18 +35,24 @@ def parse_input_data(data, call_premium_percentage=0.03):
         ytm = float(optional_data.get('yieldToMaturity', 0)) / 100
         risk_free_yield = float(optional_data.get('riskFreeYield', 0)) / 100
         benchmark_yield = float(optional_data.get('benchmarkYield', 0)) / 100
-        option_value = float(optional_data.get('optionValue', 0))
 
     years_to_call = None
+
     if 'date_first_par_call' in bond_data:
         date_first_par_call = bond_data.get('date_first_par_call')
         if date_first_par_call:
             years_to_call = calculate_years_to_call(date_first_par_call, issue_date.strftime('%Y%m%d'))
     
     call_price = float(bond_data.get('call_price', 0))
+    
     if call_price == 0:
         face_value = 1000
         call_price = estimate_call_price(face_value, call_premium_percentage)
+
+    if is_call_option_selected:
+        option_value = calculate_option_value(option_value_calculation_data, use_api_data=True) if not optional_data.get('optionValue') else float(optional_data['optionValue'])
+    else:
+        option_value = 0
 
     return {
         'face_value': face_value,

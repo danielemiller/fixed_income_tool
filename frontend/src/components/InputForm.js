@@ -37,6 +37,7 @@ const InputForm = ({ onSubmit }) => {
       face_value: faceValue,
       date_first_par_call: dateFirstParCall,
       useApiData: useApiData, // Changed from use_api_data
+      isCallOptionSelected: optionType,
       optionalData: { // Changed from optional_data
         issuer: issuer,
         currency: currency,
@@ -46,7 +47,6 @@ const InputForm = ({ onSubmit }) => {
         benchmark_yield: optionalBenchmarkYield,
         option_value: optionalOptionValue,
         optionValueCalculation: { // Changed from option_value_calculation
-          option_type: optionType,
           strike_price: strikePrice,
           underlying_price: underlyingPrice,
           risk_free_rate: riskFreeRate,

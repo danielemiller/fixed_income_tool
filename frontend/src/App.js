@@ -27,6 +27,7 @@ const App = () => {
         bondData: bondData,
         selectedMetrics: selectedMetrics,
         useApiData: bondData.useApiData,
+        isCallOptionSelected: bondData.isCallOptionSelected,
         optionalData: {
           issuer: bondData.issuer,
           currency: bondData.currency,
