@@ -76,43 +76,36 @@ def credit_spread(bond_yield, risk_free_yield):
 def option_adjusted_spread(bond_yield, benchmark_yield, option_value):
     return (bond_yield - benchmark_yield) - option_value
 
-def calculate_bond_metrics(parsed_data):
-    face_value = parsed_data['face_value']
-    coupon_rate = parsed_data['coupon_rate']
-    ytm = parsed_data['yield_to_maturity']
-    years_to_maturity = parsed_data['years_to_maturity']
-    
-    bond_price_result = bond_price(face_value, coupon_rate, ytm, years_to_maturity)
-    yield_to_maturity_result = yield_to_maturity(bond_price_result, face_value, coupon_rate, years_to_maturity)
-    
-    if 'years_to_call' in parsed_data and 'call_price' in parsed_data:
-        yield_to_call_result = yield_to_call(bond_price_result, face_value, coupon_rate, parsed_data['years_to_call'], parsed_data['call_price'])
-    else:
-        yield_to_call_result = None
-    
-    average_life_result = average_life(parsed_data['payment_schedule'])
-    duration_result = duration(face_value, coupon_rate, ytm, years_to_maturity)
-    convexity_result = convexity(face_value, coupon_rate, ytm, years_to_maturity)
+def calculate_bond_metrics(parsed_data, selected_metrics):
+    output_data = {}
 
-    # Calculate credit spread only if risk_free_yield is provided
-    if parsed_data['risk_free_yield']:
-        credit_spread_result = credit_spread(yield_to_maturity_result, parsed_data['risk_free_yield'])
-    else:
-        credit_spread_result = None
+    if selected_metrics.get('bondPrice', False):
+        face_value = parsed_data['face_value']
+        coupon_rate = parsed_data['coupon_rate']
+        ytm = parsed_data['yield_to_maturity']
+        years_to_maturity = parsed_data['years_to_maturity']
+        output_data['bond_price'] = bond_price(face_value, coupon_rate, ytm, years_to_maturity)
 
-    # Calculate option adjusted spread only if benchmark_yield and option_value are provided
-    if parsed_data['benchmark_yield'] and parsed_data['option_value']:
-        option_adjusted_spread_result = option_adjusted_spread(yield_to_maturity_result, parsed_data['benchmark_yield'], parsed_data['option_value'])
-    else:
-        option_adjusted_spread_result = None
+    if selected_metrics.get('yieldToMaturity', False):
+        output_data['yield_to_maturity'] = parsed_data['yield_to_maturity']
 
-    return {
-        'bond_price': bond_price_result,
-        'yield_to_maturity': yield_to_maturity_result,
-        'yield_to_call': yield_to_call_result,
-        'average_life': average_life_result,
-        'duration': duration_result,
-        'convexity': convexity_result,
-        'credit_spread': credit_spread_result,
-        'option_adjusted_spread': option_adjusted_spread_result
-    }
+    if selected_metrics.get('yieldToCall', False):
+        if 'years_to_call' in parsed_data and 'call_price' in parsed_data:
+            output_data['yield_to_call'] = yield_to_call(output_data['bond_price'], parsed_data['face_value'], parsed_data['coupon_rate'], parsed_data['years_to_call'], parsed_data['call_price'])
+
+    if selected_metrics.get('optionAdjustedSpread', False):
+        if parsed_data['benchmark_yield'] and parsed_data['option_value']:
+            output_data['option_adjusted_spread'] = option_adjusted_spread(parsed_data['yield_to_maturity'], parsed_data['benchmark_yield'], parsed_data['option_value'])
+
+    if selected_metrics.get('averageLife', False):
+        output_data['average_life'] = average_life(parsed_data['payment_schedule'])
+
+    if selected_metrics.get('priceEarningsRatio', False):
+        if 'earnings' in parsed_data:
+            output_data['price_earnings_ratio'] = output_data['bond_price'] / parsed_data['earnings']
+
+    if selected_metrics.get('yieldCurve', False):
+        if 'spot_rates' in parsed_data and 'time_to_maturities' in parsed_data:
+            output_data['yield_curve'] = yield_curve(parsed_data['spot_rates'], parsed_data['time_to_maturities'])
+
+    return output_data

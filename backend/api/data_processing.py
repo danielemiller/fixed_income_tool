@@ -13,6 +13,7 @@ def parse_input_data(data, call_premium_percentage=0.03):
     maturity_date = parse_date(bond_data.get('maturity_date', ''))
     coupon_rate = float(bond_data.get('coupon_rate', 0)) / 100
     face_value = bond_data.get("face_value", 1000)
+    face_value = float(bond_data.get("face_value", 1000))
     credit_rating = bond_data.get('credit_rating', '')
     currency = bond_data.get('currency', '')
     issuer = bond_data.get('issuer', '')
@@ -54,7 +55,7 @@ def parse_input_data(data, call_premium_percentage=0.03):
         call_price = estimate_call_price(face_value, call_premium_percentage)
 
     if is_call_option_selected:
-        option_value = calculate_option_value(option_value_calculation_data, use_api_data=True) if not optional_data.get('optionValue') else float(optional_data['optionValue'])
+        option_value = calculate_option_value(option_value_calculation_data) if (not optional_data.get('optionValue') and is_call_option_selected) else float(optional_data.get('optionValue', 0))
     else:
         option_value = 0
 
@@ -83,9 +84,16 @@ def format_output_data(output_data):
         key: '{:,.2f}'.format(value) if isinstance(value, float) else value
         for key, value in output_data.items()
     }
-    formatted_output['yield_to_maturity'] = '{:.2f}%'.format(output_data['yield_to_maturity'] * 100)
-    if output_data['yield_to_call'] is not None:
-        formatted_output['yield_to_call'] = '{:.2f}%'.format(output_data['yield_to_call'] * 100)
+
+    # Format percentages
+    percentage_metrics = ['yield_to_maturity', 'yield_to_call', 'option_adjusted_spread', 'price_earnings_ratio']
+    for metric in percentage_metrics:
+        if metric in output_data:
+            formatted_output[metric] = '{:.2f}%'.format(output_data[metric] * 100)
+
+    # Format other metrics if needed
+    if 'average_life' in output_data:
+        formatted_output['average_life'] = '{:.2f} years'.format(output_data['average_life'])
 
     return formatted_output
 
