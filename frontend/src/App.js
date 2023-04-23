@@ -14,6 +14,7 @@ const App = () => {
 
   const handleFormSubmit = (data) => {
     setBondData(data);
+    // setCalculatedData({}); 
   };
 
   const handleMetricsChange = (metricId, isSelected) => {

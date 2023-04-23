@@ -12,24 +12,32 @@ def bond_price(face_value, coupon_rate, yield_to_maturity, years_to_maturity):
 
 def yield_to_maturity(bond_price_value, face_value, coupon_rate, years_to_maturity):
     def f(y):
-        return bond_price_value - bond_price(face_value, coupon_rate, y, years_to_maturity)
+        # Ensure bond_price_value is a float
+        bond_price_value_float = float(bond_price_value)
+        return bond_price_value_float - bond_price(face_value, coupon_rate, y, years_to_maturity)
 
-    return brentq(f, 0.0, 1.0) # Provide a reasonable range of yield values
+    return brentq(f, 0.0, 1.0)  # Provide a reasonable range of yield values
 
 
-def yield_to_call(bond_price_value, face_value, coupon_rate, years_to_call, call_price):
-    def f(ytc):
-        c = face_value * coupon_rate
-        t = years_to_call
-        p = bond_price_value
-        cp = call_price
+def yield_to_call(bond_price, face_value, coupon_rate, years_to_call, call_price):
+    def f(y):
+        present_value_sum = sum([(face_value * coupon_rate) / ((1 + y) ** i) for i in range(1, int(years_to_call * 2) + 1)])
+        present_value_call = call_price / ((1 + y) ** (years_to_call * 2))
+        return present_value_sum + present_value_call - bond_price
 
-        right_side = (c / 2) * ((1 - (1 + ytc / 2) ** (-2 * t)) / (ytc / 2)) + (cp / (1 + ytc / 2) ** (2 * t))
-        return p - right_side
+    methods = ['brentq', 'bisect', 'ridder', 'newton']
+    brackets = [[1e-8, 2], [1e-8, 3], [1e-8, 4], [1e-8, 5], [0.001, 0.999]]
 
-    # Change the lower bound of the bracket from 0 to a small positive number (e.g., 1e-8)
-    result = root_scalar(f, bracket=[1e-8, 1], method='brentq')
-    return result.root
+    for method in methods:
+        for bracket in brackets:
+            try:
+                result = root_scalar(f, bracket=bracket, method=method)
+                if result.converged:
+                    return result.root
+            except (ValueError, RuntimeError):
+                continue
+
+    raise ValueError("Failed to find root with provided methods and brackets. Please check if the input data is correct.")
 
 
 def average_life(payment_schedule):

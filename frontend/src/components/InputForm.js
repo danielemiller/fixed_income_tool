@@ -32,8 +32,8 @@ const InputForm = ({ onSubmit }) => {
       years_to_maturity: yearsToMaturity,
       credit_rating: creditRating,
       bond_cusip: bondCusip,
-      use_api_data: useApiData,
-      optional_data: {
+      useApiData: useApiData, // Changed from use_api_data
+      optionalData: { // Changed from optional_data
         issuer: issuer,
         currency: currency,
         bond_price: optionalBondPrice,
@@ -41,7 +41,7 @@ const InputForm = ({ onSubmit }) => {
         risk_free_yield: optionalRiskFreeYield,
         benchmark_yield: optionalBenchmarkYield,
         option_value: optionalOptionValue,
-        option_value_calculation: {
+        optionValueCalculation: { // Changed from option_value_calculation
           option_type: optionType,
           strike_price: strikePrice,
           underlying_price: underlyingPrice,
@@ -52,7 +52,6 @@ const InputForm = ({ onSubmit }) => {
       },
     });
   };
-  
 
   return (
     <form data-testid="input-form" onSubmit={handleSubmit}>
@@ -229,14 +228,13 @@ const InputForm = ({ onSubmit }) => {
       <h3>Option Value Calculation (optional)</h3>
 
       <div className="form-field">
-        <label htmlFor="option-type">Option Type</label>
-        <select
+        <label htmlFor="option-type">Call Option:</label>
+        <input
+          type="checkbox"
           id="option-type"
-          value={optionType}
-          onChange={(e) => setOptionType(e.target.value)}
-        >
-          {/* ... option-type select options ... */}
-        </select>
+          checked={optionType}
+          onChange={(e) => setOptionType(e.target.checked)}
+        />
       </div>
 
       <div className="form-field">

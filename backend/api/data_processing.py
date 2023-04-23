@@ -6,7 +6,8 @@ from .option_value import calculate_option_value
 def parse_input_data(data):
     bond_data = data.get('bondData', {})
     optional_data = data.get('optionalData', {})
-    option_value_calculation_data = optional_data.get('option_value_calculation', {})
+    option_value_calculation_data = bond_data.get('optional_data', {}).get('option_value_calculation', {})
+
 
     issue_date = parse_date(bond_data.get('issue_date', ''))
     maturity_date = parse_date(bond_data.get('maturity_date', ''))
@@ -18,11 +19,11 @@ def parse_input_data(data):
     years_to_maturity = (maturity_date - issue_date).days // 365
     payment_schedule = bond_data.get('payment_schedule', '')
 
-    use_api_data = bond_data.get('use_api_data', False)
+    use_api_data = data.get('useApiData', False)
 
     if use_api_data:
         bond_price = get_bond_price(bond_cusip) if not optional_data.get('bondPrice') else float(optional_data['bondPrice'])
-        risk_free_yield = get_risk_free_yield() if not optional_data.get('riskFreeYield') else float(optional_data['riskFreeYield']) / 100
+        risk_free_yield = float(get_risk_free_yield()) if not optional_data.get('riskFreeYield') else float(optional_data['riskFreeYield']) / 100
         benchmark_yield = get_benchmark_yield() if not optional_data.get('benchmarkYield') else float(optional_data['benchmarkYield']) / 100
         option_value = calculate_option_value(option_value_calculation_data) if not optional_data.get('optionValue') else float(optional_data['optionValue'])
 
@@ -35,8 +36,8 @@ def parse_input_data(data):
         benchmark_yield = float(optional_data.get('benchmarkYield', 0)) / 100
         option_value = float(optional_data.get('optionValue', 0))
 
-    years_to_call = bond_data.get('years_to_call', None)
-    call_price = bond_data.get('call_price', None)
+    years_to_call = float(bond_data.get('years_to_call', 0))
+    call_price = float(bond_data.get('call_price', 0))
 
     return {
         'face_value': 1000,
