@@ -98,15 +98,28 @@ SERIES_IDS = {
 
 def get_bond_data_list(face_value=1000, coupon_rate=0.0):
     bond_data_list = []
+    
     for maturity, series_id in SERIES_IDS.items():
         yield_data = get_yield_data(series_id)
-        price = face_value * (1 + yield_data)
-        maturity_years = float(maturity.rstrip('MY'))
+        maturity_years = float(maturity.rstrip('MY')) if isinstance(maturity, str) else float(maturity)
+        coupon_payment = coupon_rate * face_value
+        
+        # Calculate the present value of cash flows
+        price = 0
+        for period in range(1, int(maturity_years)+1):
+            price += coupon_payment / (1 + yield_data)**period
+
+        # Add the present value of the face value at maturity
+        price += face_value / (1 + yield_data)**maturity_years
+        
         bond_data = {
             'coupon_rate': coupon_rate,
             'face_value': face_value,
             'price': price,
-            'maturity': maturity_years
+            'maturity': maturity_years,
+            'yield_to_maturity': yield_data
         }
         bond_data_list.append(bond_data)
+
     return bond_data_list
+

@@ -10,7 +10,7 @@ def bond_price(face_value, coupon_rate, yield_to_maturity, years_to_maturity):
     present_value_coupon_payments = sum([coupon_payment * math.exp(-yield_to_maturity * t) for t in range(1, years_to_maturity + 1)])
     present_value_face_value = face_value * math.exp(-yield_to_maturity * years_to_maturity)
 
-    print("bond price calculation: " + present_value_coupon_payments + present_value_face_value)
+    print(f"bond price calculation: {present_value_coupon_payments} {present_value_face_value}")
     return present_value_coupon_payments + present_value_face_value
 
 
