@@ -7,7 +7,6 @@ const metrics = [
   { id: 'yieldToCall', label: 'Yield to Call (YTC)' },
   { id: 'optionAdjustedSpread', label: 'Option-Adjusted Spread (OAS)' },
   { id: 'averageLife', label: 'Average Life' },
-  { id: 'priceEarningsRatio', label: "Price/Earnings (P/E) Ratio" },
   { id: 'yieldCurve', label: 'Yield Curve' }
 ];
 
