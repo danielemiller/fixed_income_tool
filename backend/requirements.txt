@@ -5,7 +5,6 @@ asgiref==3.6.0
 async-generator==1.10
 async-timeout==4.0.2
 attrs==23.1.0
-beautifulsoup4==4.12.2
 certifi==2022.12.7
 chardet>=3.0.2,<6.0.
 charset-normalizer>=2.0,<4.0
@@ -38,7 +37,6 @@ joblib==1.2.0
 jsonschema==4.17.3
 kiwisolver==1.4.4
 llvmlite==0.39.1
-lxml==4.9.2
 Mako==1.2.4
 Markdown==3.4.3
 MarkupSafe==2.1.2
@@ -79,7 +77,6 @@ seaborn==0.12.2
 shap==0.41.0
 six==1.16.0
 slicer==0.0.7
-smart-open==6.3.0
 smmap==5.0.0
 sniffio==1.3.0
 sortedcontainers==2.4.0
