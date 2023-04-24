@@ -23,7 +23,7 @@ const App = () => {
 
   const fetchDataAndCalculateMetrics = async () => {
     try {
-      const response = await axios.post('/api/process_bond_data/', {
+      const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/process_bond_data/`, {
         bondData: bondData,
         selectedMetrics: selectedMetrics,
         useApiData: bondData.useApiData,
