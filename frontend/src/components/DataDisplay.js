@@ -4,6 +4,10 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'r
 import './styles/DataDisplay.css';
 
 const DataDisplay = ({ data }) => {
+  if (!data || !data.yield_curve) {
+    return <div>Waiting for data...</div>;
+  }
+
   const yieldCurveData = data.yield_curve.map(([x, y]) => ({ x, y }));
 
   return (
