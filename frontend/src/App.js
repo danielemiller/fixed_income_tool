@@ -4,6 +4,7 @@ import InputForm from './components/InputForm';
 import MetricsSelection from './components/MetricsSelection';
 import DataDisplay from './components/DataDisplay';
 import ErrorHandling from './components/ErrorHandling';
+import Header from './components/Header';
 import './App.css';
 
 const App = () => {
@@ -11,9 +12,40 @@ const App = () => {
   const [selectedMetrics, setSelectedMetrics] = useState({});
   const [calculatedData, setCalculatedData] = useState({});
   const [error, setError] = useState(null);
+  const [formError, setFormError] = useState(null);
+  const [success, setSuccess] = useState(null);
+
+
+
+  const validateInputData = (data) => {
+    // Implement your validation logic here, return true if the data is valid, false otherwise
+    let errors = {};
+  
+    // Bond Price validation
+    if (data.selectedMetrics.includes('Bond Price') && !data.optionalData.bond_price) {
+      errors.bondPrice = 'Bond price is required.';
+    }
+  
+    // Yield to Maturity validation
+    if (data.selectedMetrics.includes('Yield to Maturity') && !data.optionalData.ytm) {
+      errors.yieldToMaturity = 'Yield to maturity is required.';
+    }
+  
+    // Add validation for the other metrics here...
+  
+    const isValid = Object.keys(errors).length === 0;
+    return { isValid, errors };
+  };
 
   const handleFormSubmit = (data) => {
-    setBondData(data);
+    const { isValid, errors } = validateInputData(data);
+    if (isValid) {
+      setBondData(data);
+      setSuccess('Inputs submitted successfully.');
+      setFormError(null);
+    } else {
+      setFormError('There was an error processing your input.');
+    }
     // setCalculatedData({}); 
   };
 
@@ -48,8 +80,11 @@ const App = () => {
 
   return (
     <div className="App">
-      <h1>Fixed Income Tool</h1>
-      <InputForm onSubmit={handleFormSubmit} />
+      <Header />
+      <h2>
+        Bond Analysis Tool: Calculate and analyze key bond metrics to make informed investment decisions
+      </h2>
+      <InputForm onSubmit={handleFormSubmit} success={success} formError={formError}/>
       <MetricsSelection onChange={handleMetricsChange} />
       <button onClick={fetchDataAndCalculateMetrics}>Calculate Metrics</button>
       <DataDisplay data={calculatedData} />
