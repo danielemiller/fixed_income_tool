@@ -149,7 +149,7 @@ const InputForm = ({ onSubmit }) => {
 
   return (
     <form data-testid="input-form" onSubmit={handleSubmit}>
-      <h3>Required Inputs</h3>
+      <h3><span>Required Inputs</span></h3>
 
       {/* ... */}
       
@@ -265,7 +265,7 @@ const InputForm = ({ onSubmit }) => {
         {errorMessages.bondCusip && <p className="error">{errorMessages.bondCusip}</p>}
       </div>
 
-      <h3>Optional Inputs</h3>
+      <h3><span>Optional Inputs</span></h3>
 
       <div className="form-field">
         <label htmlFor="use-api-data">Use API Data</label>
@@ -426,4 +426,3 @@ const InputForm = ({ onSubmit }) => {
 };
 
 export default InputForm;
-        
