@@ -1,7 +1,7 @@
 form {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  grid-gap: 1rem;
+  grid-gap: 1.5rem;
   margin-bottom: 1.5rem;
 }
 
@@ -26,6 +26,7 @@ select {
   border: 1px solid #ced4da;
   border-radius: 4px;
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  margin-bottom: 1rem; /* Add a margin-bottom to create space between elements */
 }
 
 input[type='date']:focus,
@@ -54,6 +55,7 @@ button[type='submit']:hover {
 
 .form-field {
   margin-bottom: 1.5rem;
+  margin-right: 1rem;
 }
 
 h3 {

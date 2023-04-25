@@ -4,6 +4,7 @@ import InputForm from './components/InputForm';
 import MetricsSelection from './components/MetricsSelection';
 import DataDisplay from './components/DataDisplay';
 import ErrorHandling from './components/ErrorHandling';
+import Header from './components/Header';
 import './App.css';
 
 const App = () => {
@@ -79,7 +80,10 @@ const App = () => {
 
   return (
     <div className="App">
-      <h1>Fixed Income Tool</h1>
+      <Header />
+      <h2>
+        Bond Analysis Tool: Calculate and analyze key bond metrics to make informed investment decisions
+      </h2>
       <InputForm onSubmit={handleFormSubmit} success={success} formError={formError}/>
       <MetricsSelection onChange={handleMetricsChange} />
       <button onClick={fetchDataAndCalculateMetrics}>Calculate Metrics</button>
