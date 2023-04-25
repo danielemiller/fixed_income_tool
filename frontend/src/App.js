@@ -80,7 +80,7 @@ const App = () => {
   return (
     <div className="App">
       <h1>Fixed Income Tool</h1>
-      <InputForm onSubmit={handleFormSubmit} success={success} formError={formError} metricErrors={metricErrors}/>
+      <InputForm onSubmit={handleFormSubmit} success={success} formError={formError}/>
       <MetricsSelection onChange={handleMetricsChange} />
       <button onClick={fetchDataAndCalculateMetrics}>Calculate Metrics</button>
       <DataDisplay data={calculatedData} />
