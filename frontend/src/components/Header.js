@@ -13,7 +13,7 @@ const Header = () => {
     <header className="header">
       <div className="header-logo">
         <img src={logo} alt="Logo" />
-        <h1 className="header-title">Fixed Income App</h1>
+        <h1 className="header-title">The Fixed Income App</h1>
       </div>
       <nav className={`header-nav ${isMenuOpen ? 'header-nav-open' : ''}`}>
         <ul>

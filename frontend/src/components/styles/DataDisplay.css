@@ -1,3 +1,16 @@
 .data-display {
     margin-bottom: 1.5rem;
   }
+
+.waiting-for-metrics {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.waiting-message {
+  grid-column: span 2;
+  font-family: "Comic Sans MS", 'serif';
+  text-align: center;
+}
