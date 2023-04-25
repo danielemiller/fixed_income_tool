@@ -24,43 +24,130 @@ const InputForm = ({ onSubmit }) => {
   const [expirationDate, setExpirationDate] = useState('');
   const [faceValue, setFaceValue] = useState('');
   const [dateFirstParCall, setDateFirstParCall] = useState('');
+  const [errorMessages, setErrorMessages] = useState({});
 
+
+  const validateOptionalInputs = () => {
+    const errors = {};
+  
+    const allOptionalInputs = [
+      optionalBondPrice,
+      optionalYtm,
+      optionalRiskFreeYield,
+      optionalBenchmarkYield,
+      optionalOptionValue,
+    ];
+  
+    const hasEmptyOptionalInputs = allOptionalInputs.some((input) => input === '');
+    if (!useApiData && hasEmptyOptionalInputs) {
+      errors.missingOptionalInputs = 'You must provide all optional inputs or select "Use API Data".';
+    }
+  
+    return errors;
+  };
+
+  const validateInputs = () => {
+    const errors = {};
+  
+    if (!issueDate) {
+      errors.issueDate = 'Issue Date is required.';
+    }
+    if (!maturityDate) {
+      errors.maturityDate = 'Maturity Date is required.';
+    }
+    if (!couponRate) {
+      errors.couponRate = 'Coupon Rate is required.';
+    }
+    if (!yearsToMaturity) {
+      errors.yearsToMaturity = 'Years to Maturity is required.';
+    }
+    if (!faceValue) {
+      errors.faceValue = 'Face Value is required.';
+    }
+    if (!creditRating) {
+      errors.creditRating = 'Credit Rating is required.';
+    }
+    if (!dateFirstParCall) {
+      errors.dateFirstParCall = 'Date of First Par Call is required.';
+    }
+    if (!bondCusip) {
+      errors.bondCusip = 'Bond Cusip is required.';
+    }
+  
+    if (optionType) {
+      if (!strikePrice) {
+        errors.strikePrice = 'Strike Price is required when Call Option is selected.';
+      }
+      if (!underlyingPrice) {
+        errors.underlyingPrice = 'Underlying Price is required when Call Option is selected.';
+      }
+      if (!riskFreeRate) {
+        errors.riskFreeRate = 'Risk-Free Rate is required when Call Option is selected.';
+      }
+      if (!volatility) {
+        errors.volatility = 'Volatility is required when Call Option is selected.';
+      }
+      if (!expirationDate) {
+        errors.expirationDate = 'Expiration Date is required when Call Option is selected.';
+      }
+    }
+  
+    if (optionalOptionValue && optionType) {
+      errors.optionValueConflict = 'You cannot submit both an optional value and select the Call Option. Please choose one method.';
+    }
+    
+    const optionalErrors = validateOptionalInputs();
+    Object.assign(errors, optionalErrors);
+
+    return errors;
+  };
+  
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSubmit({
-      issue_date: issueDate,
-      maturity_date: maturityDate,
-      coupon_rate: couponRate,
-      years_to_maturity: yearsToMaturity,
-      credit_rating: creditRating,
-      bond_cusip: bondCusip,
-      face_value: faceValue,
-      date_first_par_call: dateFirstParCall,
-      useApiData: useApiData, // Changed from use_api_data
-      isCallOptionSelected: optionType,
-      optionalData: { // Changed from optional_data
-        issuer: issuer,
-        currency: currency,
-        bond_price: optionalBondPrice,
-        ytm: optionalYtm,
-        risk_free_yield: optionalRiskFreeYield,
-        benchmark_yield: optionalBenchmarkYield,
-        option_value: optionalOptionValue,
-        optionValueCalculation: { // Changed from option_value_calculation
-          strike_price: strikePrice,
-          underlying_price: underlyingPrice,
-          risk_free_rate: riskFreeRate,
-          volatility: volatility,
-          expiration_date: expirationDate,
+    const errors = validateInputs();
+
+    if (Object.keys(errors).length === 0) {
+      // No errors, proceed with submission
+      onSubmit({
+        issue_date: issueDate,
+        maturity_date: maturityDate,
+        coupon_rate: couponRate,
+        years_to_maturity: yearsToMaturity,
+        credit_rating: creditRating,
+        bond_cusip: bondCusip,
+        face_value: faceValue,
+        date_first_par_call: dateFirstParCall,
+        useApiData: useApiData, // Changed from use_api_data
+        isCallOptionSelected: optionType,
+        optionalData: { // Changed from optional_data
+          issuer: issuer,
+          currency: currency,
+          bond_price: optionalBondPrice,
+          ytm: optionalYtm,
+          risk_free_yield: optionalRiskFreeYield,
+          benchmark_yield: optionalBenchmarkYield,
+          option_value: optionalOptionValue,
+          optionValueCalculation: { // Changed from option_value_calculation
+            strike_price: strikePrice,
+            underlying_price: underlyingPrice,
+            risk_free_rate: riskFreeRate,
+            volatility: volatility,
+            expiration_date: expirationDate,
+          },
         },
-      },
-    });
+      });
+
+      
+    } else {
+      setErrorMessages(errors);
+    }
   };
 
   return (
     <form data-testid="input-form" onSubmit={handleSubmit}>
       <h3>Required Inputs</h3>
 
+      {/* ... */}
       <div className="form-field">
         <label htmlFor="issue-date">Issue Date</label>
         <input
@@ -69,7 +156,9 @@ const InputForm = ({ onSubmit }) => {
           value={issueDate}
           onChange={(e) => setIssueDate(e.target.value)}
         />
+        {errorMessages.issueDate && <p className="error">{errorMessages.issueDate}</p>}
       </div>
+      {/* ... */}
 
       <div className="form-field">
         <label htmlFor="maturity-date">Maturity Date</label>
@@ -79,6 +168,7 @@ const InputForm = ({ onSubmit }) => {
           value={maturityDate}
           onChange={(e) => setMaturityDate(e.target.value)}
         />
+        {errorMessages.maturityDate && <p className="error">{errorMessages.maturityDate}</p>}
       </div>
 
       <div className="form-field">
@@ -89,6 +179,7 @@ const InputForm = ({ onSubmit }) => {
           value={couponRate}
           onChange={(e) => setCouponRate(e.target.value)}
         />
+        {errorMessages.couponRate && <p className="error">{errorMessages.couponRate}</p>}
       </div>
 
       <div className="form-field">
@@ -99,6 +190,7 @@ const InputForm = ({ onSubmit }) => {
           value={yearsToMaturity}
           onChange={(e) => setYearsToMaturity(e.target.value)}
         />
+        {errorMessages.yearsToMaturity && <p className="error">{errorMessages.yearsToMaturity}</p>}
       </div>
       
       <div className="form-field">
@@ -109,6 +201,7 @@ const InputForm = ({ onSubmit }) => {
           value={faceValue}
           onChange={(e) => setFaceValue(e.target.value)}
         />
+        {errorMessages.faceValue && <p className="error">{errorMessages.faceValue}</p>}
       </div>
 
       <div className="form-field">
@@ -141,6 +234,7 @@ const InputForm = ({ onSubmit }) => {
           <option value="C">C</option>
           <option value="D">D</option>
         </select>
+        {errorMessages.creditRating && <p className="error">{errorMessages.creditRating}</p>}
       </div>
       
       <div className="form-field">
@@ -151,7 +245,8 @@ const InputForm = ({ onSubmit }) => {
             name="dateFirstParCall"
             value={dateFirstParCall}
             onChange={(e) => setDateFirstParCall(e.target.value)}
-          /> 
+          />
+          {errorMessages.dateFirstParCall && <p className="error">{errorMessages.dateFirstParCall}</p>} 
         </div>
 
       <div className="form-field">
@@ -162,6 +257,7 @@ const InputForm = ({ onSubmit }) => {
           value={bondCusip}
           onChange={(e) => setBondCusip(e.target.value)}
         />
+        {errorMessages.bondCusip && <p className="error">{errorMessages.bondCusip}</p>}
       </div>
 
       <h3>Optional Inputs</h3>
@@ -174,6 +270,7 @@ const InputForm = ({ onSubmit }) => {
           checked={useApiData}
           onChange={(e) => setUseApiData(e.target.checked)}
         />
+        {errorMessages.missingOptionalInputs && <p className="error">{errorMessages.missingOptionalInputs}</p>}
       </div>
 
       <div className="form-field">
@@ -262,6 +359,7 @@ const InputForm = ({ onSubmit }) => {
         />
       </div>
 
+      {/* ... */}
       <div className="form-field">
         <label htmlFor="strike-price">Strike Price</label>
         <input
@@ -270,17 +368,9 @@ const InputForm = ({ onSubmit }) => {
           value={strikePrice}
           onChange={(e) => setStrikePrice(e.target.value)}
         />
+        {errorMessages.strikePrice && <p className="error">{errorMessages.strikePrice}</p>}
       </div>
-
-      <div className="form-field">
-        <label htmlFor="underlying-price">Underlying Price</label>
-        <input
-          id="underlying-price"
-          type="number"
-          value={underlyingPrice}
-          onChange={(e) => setUnderlyingPrice(e.target.value)}
-        />
-      </div>
+      {/* ... */}
 
       <div className="form-field">
         <label htmlFor="risk-free-rate">Risk-Free Rate</label>
@@ -290,8 +380,8 @@ const InputForm = ({ onSubmit }) => {
           value={riskFreeRate}
           onChange={(e) => setRiskFreeRate(e.target.value)}
         />
+        {errorMessages.riskFreeRate && <p className="error">{errorMessages.riskFreeRate}</p>}
       </div>
-
       <div className="form-field">
         <label htmlFor="volatility">Volatility</label>
         <input
@@ -300,8 +390,8 @@ const InputForm = ({ onSubmit }) => {
           value={volatility}
           onChange={(e) => setVolatility(e.target.value)}
         />
+        {errorMessages.volatility && <p className="error">{errorMessages.volatility}</p>}
       </div>
-
       <div className="form-field">
         <label htmlFor="expiration-date">Expiration Date</label>
         <input
@@ -310,6 +400,7 @@ const InputForm = ({ onSubmit }) => {
           value={expirationDate}
           onChange={(e) => setExpirationDate(e.target.value)}
         />
+        {errorMessages.expirationDate && <p className="error">{errorMessages.expirationDate}</p>}
       </div>
 
       <button type="submit">Submit</button>
