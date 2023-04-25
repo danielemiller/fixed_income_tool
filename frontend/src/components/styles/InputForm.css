@@ -53,10 +53,15 @@ button[type='submit']:hover {
   cursor: pointer;
 }
 
+.submit-error {
+  grid-column: span 2;
+}
+
 .form-field {
   margin-bottom: 1.5rem;
   margin-right: 1rem;
 }
+
 
 h3 {
   grid-column: span 2; /* Make the h3 elements span both columns */
@@ -73,6 +78,7 @@ h3 {
   color: red;
   font-size: 0.8em;
   margin-top: 5px;
+  text-align: center;
 }
 
 @media (max-width: 767px) {

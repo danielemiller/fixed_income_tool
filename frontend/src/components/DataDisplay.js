@@ -5,7 +5,7 @@ import './styles/DataDisplay.css';
 
 const DataDisplay = ({ data }) => {
   if (!data || !data.yield_curve) {
-    return <div>Loading...</div>;
+    return <div>Waiting for Metric Selections to be submitted to run calculations...</div>;
   }
 
   const yieldCurveData = data.yield_curve.map(([x, y]) => ({ x, y }));

@@ -152,6 +152,7 @@ const InputForm = ({ onSubmit }) => {
       <h3>Required Inputs</h3>
 
       {/* ... */}
+      
       <div className="form-field">
         <label htmlFor="issue-date">Issue Date</label>
         <input
@@ -377,6 +378,17 @@ const InputForm = ({ onSubmit }) => {
       {/* ... */}
 
       <div className="form-field">
+        <label htmlFor="underlying-price">Underlying Price</label>
+        <input
+          id="underlying-price"
+          type="number"
+          value={underlyingPrice}
+          onChange={(e) => setUnderlyingPrice(e.target.value)}
+        />
+        {errorMessages.strikePrice && <p className="error">{errorMessages.strikePrice}</p>}
+      </div>
+
+      <div className="form-field">
         <label htmlFor="risk-free-rate">Risk-Free Rate</label>
         <input
           id="risk-free-rate"
@@ -408,7 +420,7 @@ const InputForm = ({ onSubmit }) => {
       </div>
 
       <button type="submit">Submit</button>
-      {errorMessages.mainSubmitError && <p className="error">{errorMessages.mainSubmitError}</p>}
+      <div className='submit-error'>{errorMessages.mainSubmitError && <p className="error">{errorMessages.mainSubmitError}</p>}</div>
     </form>
   );
 };
