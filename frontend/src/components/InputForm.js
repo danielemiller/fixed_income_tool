@@ -407,6 +407,20 @@ const InputForm = ({ onSubmit }) => {
     </form>
   );
 };
-        
+
+InputForm.propTypes = {
+  onSubmit: PropTypes.func.isRequired,
+  success: PropTypes.string,
+  setSuccess: PropTypes.func.isRequired,
+  formError: PropTypes.string,
+  metricErrors: PropTypes.object,
+};
+
+InputForm.defaultProps = {
+  success: null,
+  formError: null,
+  metricErrors: {},
+};
+
 export default InputForm;
         
