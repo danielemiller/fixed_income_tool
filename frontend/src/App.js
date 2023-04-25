@@ -12,7 +12,8 @@ const App = () => {
   const [calculatedData, setCalculatedData] = useState({});
   const [error, setError] = useState(null);
   const [formError, setFormError] = useState(null);
-  const [metricErrors, setMetricErrors] = useState({});
+  const [success, setSuccess] = useState(null);
+
 
 
   const validateInputData = (data) => {
