@@ -84,8 +84,9 @@ const App = () => {
       <h2>
         Bond Analysis Tool: Calculate and analyze key bond metrics to make informed investment decisions
       </h2>
-      <InputForm onSubmit={handleFormSubmit} success={success} formError={formError}/>
       <MetricsSelection onChange={handleMetricsChange} />
+      <InputForm onSubmit={handleFormSubmit} success={success} formError={formError}/>
+      
       <button onClick={fetchDataAndCalculateMetrics}>Calculate Metrics</button>
       <DataDisplay data={calculatedData} />
       <ErrorHandling error={error} />
