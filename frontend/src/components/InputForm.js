@@ -99,6 +99,10 @@ const InputForm = ({ onSubmit }) => {
     const optionalErrors = validateOptionalInputs();
     Object.assign(errors, optionalErrors);
 
+    if(errors){
+      errors.mainSubmitError = 'There seems to be a problem with some of your inputs'
+    }
+
     return errors;
   };
   
@@ -404,6 +408,7 @@ const InputForm = ({ onSubmit }) => {
       </div>
 
       <button type="submit">Submit</button>
+      {errorMessages.mainSubmitError && <p className="error">{errorMessages.mainSubmitError}</p>}
     </form>
   );
 };
