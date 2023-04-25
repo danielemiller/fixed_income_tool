@@ -5,7 +5,7 @@ import './styles/DataDisplay.css';
 
 const DataDisplay = ({ data }) => {
   if (!data || !data.yield_curve) {
-    return <div>Waiting for Metric Selections to be submitted to run calculations...</div>;
+    return <div className='waiting-for-metrics'><p className='waiting-message'>Waiting for Metric Selections to be submitted to run calculations...choose the metrics you would like to calculate!</p></div>;
   }
 
   const yieldCurveData = data.yield_curve.map(([x, y]) => ({ x, y }));
