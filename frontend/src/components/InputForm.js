@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './styles/InputForm.css';
 
-const InputForm = ({ onSubmit, bondData }) => {
+const InputForm = ({ onSubmit, bondData, success, formError }) => {
   const [issueDate, setIssueDate] = useState('');
   const [maturityDate, setMaturityDate] = useState('');
   const [couponRate, setCouponRate] = useState('');
@@ -445,7 +445,8 @@ const InputForm = ({ onSubmit, bondData }) => {
         />
         {errorMessages.expirationDate && <p className="error">{errorMessages.expirationDate}</p>}
       </div>
-
+      {success && <div className="success-message">{success}</div>}
+      {formError && <div className="error-message">{formError}</div>}
       <button type="submit">Submit</button>
       <div className='submit-error'>{errorMessages.mainSubmitError && <p className="error">{errorMessages.mainSubmitError}</p>}</div>
     </form>
