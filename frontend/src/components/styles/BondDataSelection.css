@@ -1,0 +1,41 @@
+.bond-data-selection {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    margin: 0 auto;
+    max-width: 90%;
+  }
+  
+  .bond-data-column {
+    flex: 1;
+    margin-right: 1rem;
+    margin-left: 1rem;
+  }
+  
+  .bond-data-column button {
+    display: block;
+    width: 100%;
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    font-weight: bold;
+    text-align: center;
+    color: #fff;
+    background-color: #007bff;
+    border: 1px solid #007bff;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out;
+  }
+  
+  .bond-data-column button:hover {
+    background-color: #0069d9;
+    border-color: #0069d9;
+  }
+  
+  .bond-data-column button:active {
+    background-color: #005cbf;
+    border-color: #005cbf;
+  }
+  
