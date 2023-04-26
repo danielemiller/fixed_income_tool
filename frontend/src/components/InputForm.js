@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './styles/InputForm.css';
 
-const InputForm = ({ onSubmit }) => {
+const InputForm = ({ onSubmit, bondData }) => {
   const [issueDate, setIssueDate] = useState('');
   const [maturityDate, setMaturityDate] = useState('');
   const [couponRate, setCouponRate] = useState('');
@@ -26,6 +26,32 @@ const InputForm = ({ onSubmit }) => {
   const [dateFirstParCall, setDateFirstParCall] = useState('');
   const [errorMessages, setErrorMessages] = useState({});
 
+  useEffect(() => {
+    if (bondData) {
+      setIssueDate(bondData.issue_date);
+      setMaturityDate(bondData.maturity_date);
+      setCouponRate(bondData.coupon_rate);
+      setYearsToMaturity(bondData.years_to_maturity);
+      setCreditRating(bondData.credit_rating);
+      setCurrency(bondData.currency);
+      setIssuer(bondData.issuer);
+      setBondCusip(bondData.bond_cusip);
+      setUseApiData(bondData.use_api_data);
+      setOptionalBondPrice(bondData.optional_bond_price);
+      setOptionalYtm(bondData.optional_ytm);
+      setOptionalRiskFreeYield(bondData.optional_risk_free_yield);
+      setOptionalBenchmarkYield(bondData.optional_benchmark_yield);
+      setOptionalOptionValue(bondData.optional_option_value);
+      setOptionType(bondData.option_type);
+      setStrikePrice(bondData.strike_price);
+      setUnderlyingPrice(bondData.underlying_price);
+      setRiskFreeRate(bondData.risk_free_rate);
+      setVolatility(bondData.volatility);
+      setExpirationDate(bondData.expiration_date);
+      setFaceValue(bondData.face_value);
+      setDateFirstParCall(bondData.date_first_par_call);
+    }
+  }, [bondData]);
 
   const validateOptionalInputs = () => {
     const errors = {};

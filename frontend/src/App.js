@@ -5,6 +5,7 @@ import MetricsSelection from './components/MetricsSelection';
 import DataDisplay from './components/DataDisplay';
 import ErrorHandling from './components/ErrorHandling';
 import Header from './components/Header';
+import BondDataSelection from './components/BondDataSelection';
 import './App.css';
 
 const App = () => {
@@ -84,9 +85,9 @@ const App = () => {
       <h2>
         Bond Analysis Tool: Calculate and analyze key bond metrics to make informed investment decisions
       </h2>
+      <BondDataSelection onBondDataSelect={setBondData} />
       <MetricsSelection onChange={handleMetricsChange} />
-      <InputForm onSubmit={handleFormSubmit} success={success} formError={formError}/>
-      
+      <InputForm onSubmit={handleFormSubmit} success={success} formError={formError} bondData={bondData} />
       <button onClick={fetchDataAndCalculateMetrics}>Calculate Metrics</button>
       <DataDisplay data={calculatedData} />
       <ErrorHandling error={error} />
