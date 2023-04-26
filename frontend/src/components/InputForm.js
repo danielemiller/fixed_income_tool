@@ -23,7 +23,7 @@ const InputForm = ({ onSubmit, bondData }) => {
   const [volatility, setVolatility] = useState('');
   const [expirationDate, setExpirationDate] = useState('');
   const [faceValue, setFaceValue] = useState('');
-  const [dateFirstParCall, setDateFirstParCall] = useState('');
+  const [optionalDateFirstParCall, setOptionalDateFirstParCall] = useState('');
   const [errorMessages, setErrorMessages] = useState({});
 
   useEffect(() => {
@@ -49,7 +49,7 @@ const InputForm = ({ onSubmit, bondData }) => {
       setVolatility(bondData.volatility);
       setExpirationDate(bondData.expiration_date);
       setFaceValue(bondData.face_value);
-      setDateFirstParCall(bondData.date_first_par_call);
+      setOptionalDateFirstParCall(bondData.date_first_par_call);
     }
   }, [bondData]);
 
@@ -62,6 +62,7 @@ const InputForm = ({ onSubmit, bondData }) => {
       optionalRiskFreeYield,
       optionalBenchmarkYield,
       optionalOptionValue,
+      optionalDateFirstParCall
     ];
   
     const hasEmptyOptionalInputs = allOptionalInputs.some((input) => input === '');
@@ -93,9 +94,7 @@ const InputForm = ({ onSubmit, bondData }) => {
     if (!creditRating) {
       errors.creditRating = 'Credit Rating is required.';
     }
-    if (!dateFirstParCall) {
-      errors.dateFirstParCall = 'Date of First Par Call is required.';
-    }
+    
     if (!bondCusip) {
       errors.bondCusip = 'Bond Cusip is required.';
     }
@@ -125,7 +124,9 @@ const InputForm = ({ onSubmit, bondData }) => {
     const optionalErrors = validateOptionalInputs();
     Object.assign(errors, optionalErrors);
 
-    if(errors){
+    if(Object.keys(errors).length > 0 || Object.keys(optionalErrors).length > 0){
+      console.log(errors)
+      console.log(optionalErrors)
       errors.mainSubmitError = 'There seems to be a problem with some of your inputs'
     }
 
@@ -146,7 +147,7 @@ const InputForm = ({ onSubmit, bondData }) => {
         credit_rating: creditRating,
         bond_cusip: bondCusip,
         face_value: faceValue,
-        date_first_par_call: dateFirstParCall,
+        date_first_par_call: optionalDateFirstParCall,
         useApiData: useApiData, // Changed from use_api_data
         isCallOptionSelected: optionType,
         optionalData: { // Changed from optional_data
@@ -267,18 +268,6 @@ const InputForm = ({ onSubmit, bondData }) => {
         </select>
         {errorMessages.creditRating && <p className="error">{errorMessages.creditRating}</p>}
       </div>
-      
-      <div className="form-field">
-        <label htmlFor="dateFirstParCall">Date of First Par Call:</label>
-          <input
-            type="date"
-            id="dateFirstParCall"
-            name="dateFirstParCall"
-            value={dateFirstParCall}
-            onChange={(e) => setDateFirstParCall(e.target.value)}
-          />
-          {errorMessages.dateFirstParCall && <p className="error">{errorMessages.dateFirstParCall}</p>} 
-        </div>
 
       <div className="form-field">
         <label htmlFor="bond-cusip">Bond Cusip</label>
@@ -377,6 +366,18 @@ const InputForm = ({ onSubmit, bondData }) => {
           onChange={(e) => setOptionalOptionValue(e.target.value)}
         />
       </div>
+
+      <div className="form-field">
+        <label htmlFor="dateFirstParCall">Date of First Par Call:</label>
+          <input
+            type="date"
+            id="dateFirstParCall"
+            name="dateFirstParCall"
+            value={optionalDateFirstParCall}
+            onChange={(e) => setOptionalDateFirstParCall(e.target.value)}
+          />
+          {errorMessages.OptionalDateFirstParCall && <p className="error">{errorMessages.optionalDateFirstParCall}</p>} 
+        </div>
 
       <h3>Option Value Calculation (optional)</h3>
 

@@ -17,18 +17,20 @@ const App = () => {
   const [success, setSuccess] = useState(null);
 
 
-
   const validateInputData = (data) => {
     // Implement your validation logic here, return true if the data is valid, false otherwise
     let errors = {};
   
+    // Convert selectedMetrics object to an array of selected metric keys
+    const selectedMetricKeys = Object.keys(data.selectedMetrics).filter((key) => data.selectedMetrics[key]);
+  
     // Bond Price validation
-    if (data.selectedMetrics.includes('Bond Price') && !data.optionalData.bond_price) {
+    if (selectedMetricKeys.includes('bondPrice') && !data.optionalData.bond_price) {
       errors.bondPrice = 'Bond price is required.';
     }
   
     // Yield to Maturity validation
-    if (data.selectedMetrics.includes('Yield to Maturity') && !data.optionalData.ytm) {
+    if (selectedMetricKeys.includes('yieldToMaturity') && !data.optionalData.ytm) {
       errors.yieldToMaturity = 'Yield to maturity is required.';
     }
   
@@ -39,6 +41,7 @@ const App = () => {
   };
 
   const handleFormSubmit = (data) => {
+    data.selectedMetrics = selectedMetrics;
     const { isValid, errors } = validateInputData(data);
     if (isValid) {
       setBondData(data);
