@@ -71,6 +71,29 @@ def get_bond_price(cusip, start_date=None, end_date=None):
     else:
         return None
 
+def get_bond_description(cusip, start_date=None, end_date=None):
+    token = authenticate()
+    url = f'https://ftl.fasttrack.net/v1/bonds/{cusip}/description'
+    print(f"url={url}")
+    headers = {
+        'appid': APP_ID,
+        'token': token
+    }
+    params = {}
+    if start_date:
+        params['start'] = start_date
+    if end_date:
+        params['end'] = end_date
+
+    response = requests.get(url, headers=headers, params=params)
+
+    if response.status_code == 200:
+        data = response.json()
+        return data
+    else:
+        print(f"Error fetching bond data for CUSIP {cusip}: {response.status_code}")
+        return None
+
 def get_risk_free_yield():
     risk_free_yield = float(fred.get_series('GS10')[-1]) / 100  # 10-Year Treasury Constant Maturity Rate
     return risk_free_yield

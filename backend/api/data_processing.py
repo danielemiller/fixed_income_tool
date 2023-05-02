@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 from collections import defaultdict
-from .external_data import get_bond_price, get_risk_free_yield, get_benchmark_yield
+from .external_data import get_bond_price, get_risk_free_yield, get_benchmark_yield, get_bond_description
 from .calculation_engine import yield_to_maturity
 from .option_value import calculate_option_value
 
@@ -146,3 +146,36 @@ def calculate_payment_schedule(issue_date, maturity_date, coupon_rate, face_valu
     print(payment_schedule)
     return payment_schedule
 
+def parse_bond_description(data):
+    bond_cusip = data.get('bond_cusip')
+    bond_description_data = get_bond_description(bond_cusip)
+
+    issue_date = parse_date(bond_description_data["issuer"]["issue_date"])
+    maturity_date = parse_date(bond_description_data["details"]["date_maturity"])
+    coupon_rate = float(bond_description_data["issuer"]["coupon_type"])
+    years_to_maturity = (maturity_date - issue_date).days / 365
+    face_value = float(bond_description_data["issuer"]["nominal_value"])
+    credit_rating_moodys = bond_description_data["ratings"]["moodys"]
+    credit_rating_sandp = bond_description_data["ratings"]["sandp"]
+
+    return {
+        "issue_date": issue_date,
+        "maturity_date": maturity_date,
+        "coupon_rate": coupon_rate,
+        "years_to_maturity": years_to_maturity,
+        "face_value": face_value,
+        "credit_rating_moodys": credit_rating_moodys,
+        "credit_rating_sandp": credit_rating_sandp,
+    }
+
+def format_description_data(data):
+    formatted_data = {
+        "issue_date": data["issue_date"].strftime('%Y-%m-%d'),
+        "maturity_date": data["maturity_date"].strftime('%Y-%m-%d'),
+        "coupon_rate": "{:.2f}%".format(data["coupon_rate"]),
+        "years_to_maturity": "{:.2f} years".format(data["years_to_maturity"]),
+        "face_value": "${:,.2f}".format(data["face_value"]),
+        "credit_rating_moodys": data["credit_rating_moodys"],
+        "credit_rating_sandp": data["credit_rating_sandp"],
+    }
+    return formatted_data

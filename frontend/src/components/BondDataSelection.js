@@ -1,11 +1,8 @@
 import React from 'react';
 import './styles/BondDataSelection.css';
 import BondInfoModal from './BondInfoModal';
-import {sampleBondData} from './sampleBondData';
 
-const bondDataList = sampleBondData;
-
-const BondDataSelection = ({ onBondDataSelect }) => {
+const BondDataSelection = ({ bondDataList, onBondDataSelect }) => {
   const [showModal, setShowModal] = React.useState(false);
   const [selectedBondData, setSelectedBondData] = React.useState(null);
   

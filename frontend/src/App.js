@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import InputForm from './components/InputForm';
 import MetricsSelection from './components/MetricsSelection';
@@ -15,7 +15,20 @@ const App = () => {
   const [error, setError] = useState(null);
   const [formError, setFormError] = useState(null);
   const [success, setSuccess] = useState(null);
+  const [bondDataList, setBondDataList] = useState([]);
 
+  const fetchBondDataList = async () => {
+    try {
+      const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/fetch_bond_data_list/`);
+      setBondDataList(response.data);
+    } catch (err) {
+      console.error(err.message || 'An error occurred while fetching bond data list.');
+    }
+  };
+  
+  useEffect(() => {
+    fetchBondDataList();
+  }, []);
 
   const validateInputData = (data) => {
     // Implement your validation logic here, return true if the data is valid, false otherwise
@@ -57,6 +70,7 @@ const App = () => {
     setSelectedMetrics({ ...selectedMetrics, [metricId]: isSelected });
   };
 
+
   const fetchDataAndCalculateMetrics = async () => {
     try {
       const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/process_bond_data/`, {
@@ -82,13 +96,14 @@ const App = () => {
     }
   };
 
+
   return (
     <div className="App">
       <Header />
       <h2>
         Bond Analysis Tool: Calculate and analyze key bond metrics to make informed investment decisions
       </h2>
-      <BondDataSelection onBondDataSelect={setBondData} />
+      <BondDataSelection onBondDataSelect={setBondData} bondDataList={bondDataList}/>
       <MetricsSelection onChange={handleMetricsChange} />
       <InputForm onSubmit={handleFormSubmit} success={success} formError={formError} bondData={bondData} />
       <button onClick={fetchDataAndCalculateMetrics}>Calculate Metrics</button>
