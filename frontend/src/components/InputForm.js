@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './styles/InputForm.css';
 
-const InputForm = ({ onSubmit }) => {
+const InputForm = ({ onSubmit, bondData, success, formError }) => {
   const [issueDate, setIssueDate] = useState('');
   const [maturityDate, setMaturityDate] = useState('');
   const [couponRate, setCouponRate] = useState('');
@@ -23,9 +23,35 @@ const InputForm = ({ onSubmit }) => {
   const [volatility, setVolatility] = useState('');
   const [expirationDate, setExpirationDate] = useState('');
   const [faceValue, setFaceValue] = useState('');
-  const [dateFirstParCall, setDateFirstParCall] = useState('');
+  const [optionalDateFirstParCall, setOptionalDateFirstParCall] = useState('');
   const [errorMessages, setErrorMessages] = useState({});
 
+  useEffect(() => {
+    if (bondData) {
+      setIssueDate(bondData.issue_date);
+      setMaturityDate(bondData.maturity_date);
+      setCouponRate(bondData.coupon_rate);
+      setYearsToMaturity(bondData.years_to_maturity);
+      setCreditRating(bondData.credit_rating);
+      setCurrency(bondData.currency);
+      setIssuer(bondData.issuer);
+      setBondCusip(bondData.bond_cusip);
+      setUseApiData(bondData.use_api_data);
+      setOptionalBondPrice(bondData.optional_bond_price);
+      setOptionalYtm(bondData.optional_ytm);
+      setOptionalRiskFreeYield(bondData.optional_risk_free_yield);
+      setOptionalBenchmarkYield(bondData.optional_benchmark_yield);
+      setOptionalOptionValue(bondData.optional_option_value);
+      setOptionType(bondData.option_type);
+      setStrikePrice(bondData.strike_price);
+      setUnderlyingPrice(bondData.underlying_price);
+      setRiskFreeRate(bondData.risk_free_rate);
+      setVolatility(bondData.volatility);
+      setExpirationDate(bondData.expiration_date);
+      setFaceValue(bondData.face_value);
+      setOptionalDateFirstParCall(bondData.date_first_par_call);
+    }
+  }, [bondData]);
 
   const validateOptionalInputs = () => {
     const errors = {};
@@ -36,6 +62,7 @@ const InputForm = ({ onSubmit }) => {
       optionalRiskFreeYield,
       optionalBenchmarkYield,
       optionalOptionValue,
+      optionalDateFirstParCall
     ];
   
     const hasEmptyOptionalInputs = allOptionalInputs.some((input) => input === '');
@@ -67,9 +94,7 @@ const InputForm = ({ onSubmit }) => {
     if (!creditRating) {
       errors.creditRating = 'Credit Rating is required.';
     }
-    if (!dateFirstParCall) {
-      errors.dateFirstParCall = 'Date of First Par Call is required.';
-    }
+    
     if (!bondCusip) {
       errors.bondCusip = 'Bond Cusip is required.';
     }
@@ -99,7 +124,9 @@ const InputForm = ({ onSubmit }) => {
     const optionalErrors = validateOptionalInputs();
     Object.assign(errors, optionalErrors);
 
-    if(errors){
+    if(Object.keys(errors).length > 0 || Object.keys(optionalErrors).length > 0){
+      console.log(errors)
+      console.log(optionalErrors)
       errors.mainSubmitError = 'There seems to be a problem with some of your inputs'
     }
 
@@ -120,7 +147,7 @@ const InputForm = ({ onSubmit }) => {
         credit_rating: creditRating,
         bond_cusip: bondCusip,
         face_value: faceValue,
-        date_first_par_call: dateFirstParCall,
+        date_first_par_call: optionalDateFirstParCall,
         useApiData: useApiData, // Changed from use_api_data
         isCallOptionSelected: optionType,
         optionalData: { // Changed from optional_data
@@ -149,7 +176,7 @@ const InputForm = ({ onSubmit }) => {
 
   return (
     <form data-testid="input-form" onSubmit={handleSubmit}>
-      <h3>Required Inputs</h3>
+      <h3><span>Required Inputs</span></h3>
 
       {/* ... */}
       
@@ -241,18 +268,6 @@ const InputForm = ({ onSubmit }) => {
         </select>
         {errorMessages.creditRating && <p className="error">{errorMessages.creditRating}</p>}
       </div>
-      
-      <div className="form-field">
-        <label htmlFor="dateFirstParCall">Date of First Par Call:</label>
-          <input
-            type="date"
-            id="dateFirstParCall"
-            name="dateFirstParCall"
-            value={dateFirstParCall}
-            onChange={(e) => setDateFirstParCall(e.target.value)}
-          />
-          {errorMessages.dateFirstParCall && <p className="error">{errorMessages.dateFirstParCall}</p>} 
-        </div>
 
       <div className="form-field">
         <label htmlFor="bond-cusip">Bond Cusip</label>
@@ -265,7 +280,7 @@ const InputForm = ({ onSubmit }) => {
         {errorMessages.bondCusip && <p className="error">{errorMessages.bondCusip}</p>}
       </div>
 
-      <h3>Optional Inputs</h3>
+      <h3><span>Optional Inputs</span></h3>
 
       <div className="form-field">
         <label htmlFor="use-api-data">Use API Data</label>
@@ -352,6 +367,18 @@ const InputForm = ({ onSubmit }) => {
         />
       </div>
 
+      <div className="form-field">
+        <label htmlFor="dateFirstParCall">Date of First Par Call:</label>
+          <input
+            type="date"
+            id="dateFirstParCall"
+            name="dateFirstParCall"
+            value={optionalDateFirstParCall}
+            onChange={(e) => setOptionalDateFirstParCall(e.target.value)}
+          />
+          {errorMessages.OptionalDateFirstParCall && <p className="error">{errorMessages.optionalDateFirstParCall}</p>} 
+        </div>
+
       <h3>Option Value Calculation (optional)</h3>
 
       <div className="form-field">
@@ -418,7 +445,8 @@ const InputForm = ({ onSubmit }) => {
         />
         {errorMessages.expirationDate && <p className="error">{errorMessages.expirationDate}</p>}
       </div>
-
+      {success && <div className="success-message">{success}</div>}
+      {formError && <div className="error-message">{formError}</div>}
       <button type="submit">Submit</button>
       <div className='submit-error'>{errorMessages.mainSubmitError && <p className="error">{errorMessages.mainSubmitError}</p>}</div>
     </form>
@@ -426,4 +454,3 @@ const InputForm = ({ onSubmit }) => {
 };
 
 export default InputForm;
-        

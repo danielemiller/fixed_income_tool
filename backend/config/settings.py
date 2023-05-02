@@ -39,7 +39,7 @@ SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY") if ON_HEROKU else db_config.DJA
 
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['fixed-income-tool-backend.herokuapp.com']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'api',
     'data_storage',
     'dbbackup',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -61,6 +62,12 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
+]
+
+CORS_ALLOWED_ORIGINS = [
+    "https://fixed-income-tool-frontend.herokuapp.com",
 ]
 
 ROOT_URLCONF = 'config.urls'
