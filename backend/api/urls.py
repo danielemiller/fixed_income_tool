@@ -7,6 +7,6 @@ app_name = 'api'
 
 urlpatterns = [
     path('process_bond_data/', process_bond_data, name='process_bond_data'),
-    path('api/fetch_bond_data_list/', fetch_bond_data_list, name='fetch_bond_data_list'),
+    path('fetch_bond_data_list/', fetch_bond_data_list, name='fetch_bond_data_list'),
 ]
 

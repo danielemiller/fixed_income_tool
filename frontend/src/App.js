@@ -21,6 +21,7 @@ const App = () => {
     try {
       const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/fetch_bond_data_list/`);
       setBondDataList(response.data);
+      console.log(bondDataList);
     } catch (err) {
       console.error(err.message || 'An error occurred while fetching bond data list.');
     }
@@ -28,7 +29,8 @@ const App = () => {
   
   useEffect(() => {
     fetchBondDataList();
-  }, []);
+    console.log(bondDataList)
+  }, [bondDataList]);
 
   const validateInputData = (data) => {
     // Implement your validation logic here, return true if the data is valid, false otherwise

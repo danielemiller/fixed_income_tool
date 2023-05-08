@@ -14,15 +14,19 @@ def process_bond_data(request):
 
     return JsonResponse(formatted_output, safe=False)
 
+@api_view(['GET'])
 def fetch_bond_data_list(request):
     # Replace with the actual list of CUSIPs you want to fetch.
-    cusip_list = ['123456789', '987654321']
-    
-    bond_data_list = []
-    for cusip in cusip_list:
-        raw_bond_data = get_bond_description(cusip)
-        parsed_bond_data = parse_bond_description(raw_bond_data)
-        formatted_bond_data = format_description_data(parsed_bond_data)
-        bond_data_list.append(formatted_bond_data)
+    cusip_list = ['594918AD6', '037833DE7', '9128284J6', '594918AD6']
+
+    def fetch_and_format_bond_data(cusip):
+        return format_description_data(
+            parse_bond_description(
+                get_bond_description(cusip)
+            )
+        )
+
+    bond_data_list = [fetch_and_format_bond_data(cusip) for cusip in cusip_list]
 
     return JsonResponse(bond_data_list, safe=False)
+

@@ -90,7 +90,10 @@ def parse_input_data(data, call_premium_percentage=0.03):
     }
 
 def parse_date(date_string):
-    return datetime.strptime(date_string, '%Y-%m-%d').date()
+    try:
+        return datetime.strptime(date_string, '%Y-%m-%d').date()
+    except ValueError:
+        return datetime.strptime(date_string, '%Y%m%d').date()
 
 def format_output_data(output_data):
     print('formatting data...')
@@ -146,17 +149,21 @@ def calculate_payment_schedule(issue_date, maturity_date, coupon_rate, face_valu
     print(payment_schedule)
     return payment_schedule
 
-def parse_bond_description(data):
-    bond_cusip = data.get('bond_cusip')
-    bond_description_data = get_bond_description(bond_cusip)
-
+def parse_bond_description(bond_description_data):
+    print(bond_description_data)
     issue_date = parse_date(bond_description_data["issuer"]["issue_date"])
     maturity_date = parse_date(bond_description_data["details"]["date_maturity"])
-    coupon_rate = float(bond_description_data["issuer"]["coupon_type"])
+    coupon_rate = float(bond_description_data["details"]["rate"])
     years_to_maturity = (maturity_date - issue_date).days / 365
     face_value = float(bond_description_data["issuer"]["nominal_value"])
-    credit_rating_moodys = bond_description_data["ratings"]["moodys"]
-    credit_rating_sandp = bond_description_data["ratings"]["sandp"]
+    issuer = bond_description_data["details"]["description"]
+
+    if "ratings" in bond_description_data:
+        credit_rating_moodys = bond_description_data["ratings"].get("moodys", None)
+        credit_rating_sandp = bond_description_data["ratings"].get("sandp", None)
+    else:
+        credit_rating_moodys = None
+        credit_rating_sandp = None
 
     return {
         "issue_date": issue_date,
@@ -166,6 +173,7 @@ def parse_bond_description(data):
         "face_value": face_value,
         "credit_rating_moodys": credit_rating_moodys,
         "credit_rating_sandp": credit_rating_sandp,
+        "issuer": issuer,
     }
 
 def format_description_data(data):

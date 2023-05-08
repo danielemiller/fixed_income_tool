@@ -39,7 +39,7 @@ SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY") if ON_HEROKU else db_config.DJA
 
 DEBUG = True
 
-ALLOWED_HOSTS = ['fixed-income-tool-backend.herokuapp.com']
+ALLOWED_HOSTS = ['fixed-income-tool-backend.herokuapp.com', 'localhost']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
