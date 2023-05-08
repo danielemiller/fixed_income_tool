@@ -21,6 +21,7 @@ const App = () => {
     try {
       const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/fetch_bond_data_list/`);
       setBondDataList(response.data);
+      console.log(response.data)
       console.log(bondDataList);
     } catch (err) {
       console.error(err.message || 'An error occurred while fetching bond data list.');
@@ -30,6 +31,10 @@ const App = () => {
   useEffect(() => {
     fetchBondDataList();
     console.log(bondDataList)
+  }, []);
+
+  useEffect(() => {
+    console.log('bondDataList updated:', bondDataList);
   }, [bondDataList]);
 
   const validateInputData = (data) => {
@@ -105,7 +110,7 @@ const App = () => {
       <h2>
         Bond Analysis Tool: Calculate and analyze key bond metrics to make informed investment decisions
       </h2>
-      <BondDataSelection onBondDataSelect={setBondData} bondDataList={bondDataList}/>
+      <BondDataSelection key={bondDataList.length} onBondDataSelect={setBondData} bondDataList={bondDataList}/>
       <MetricsSelection onChange={handleMetricsChange} />
       <InputForm onSubmit={handleFormSubmit} success={success} formError={formError} bondData={bondData} />
       <button onClick={fetchDataAndCalculateMetrics}>Calculate Metrics</button>

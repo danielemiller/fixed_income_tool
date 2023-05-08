@@ -68,6 +68,7 @@ MIDDLEWARE = [
 
 CORS_ALLOWED_ORIGINS = [
     "https://fixed-income-tool-frontend.herokuapp.com",
+    "http://localhost:3000",
 ]
 
 ROOT_URLCONF = 'config.urls'
